@@ -4,6 +4,19 @@
 
 ## 当前任务
 
+### TASK-20260828-AIC-MIGRATION
+
+- status: ASSIGNED
+- project: ai-content
+- repository: `watanuo1982/-ai-content`
+- task: 将原 `watanuo1982/-work-buddy-lab/ai-content/` 完整迁移为独立项目仓库
+- instruction: 进入 `-ai-content`，读取该项目的 `PROJECT_CONTEXT.md`、`README.md`、`CURRENT_STATE.md`、`NEXT_WORK.md`。将原 `-work-buddy-lab/ai-content/` 的历史项目文件、content、reviews、tasks 等完整迁移到 `-ai-content`，保持相对路径和文件内容；完成迁移核对后更新状态。
+- boundary: 不修改 `-quantitative-trading`；不要把 AI Content 新工作继续写入 `-work-buddy-lab`。
+- legacy: 原 `-work-buddy-lab/ai-content/` 暂作为历史快照保留，迁移核对完成后在旧仓库建立明确的 legacy/frozen 标记；不要直接删除历史资产。
+- completion: 新仓库完成完整迁移并核对；提交 commit；回到本 Hub 将本任务更新为 DONE 或 BLOCKED，并给出目标项目 commit SHA。
+- assigned_by: ChatGPT
+- assigned_at: 2026-08-28
+
 ### TASK-20260828-QT-P2B
 
 - status: ASSIGNED
@@ -19,7 +32,7 @@
 
 ChatGPT 不通过聊天逐字转述任务给 Buddy。
 
-ChatGPT 只需要在这里建立/更新任务；用户通知 Buddy：**“Agent Hub 有新任务，请读取 INBOX.md。”**
+用户只需要通知 Buddy：**“Agent Hub 有新任务，请读取 INBOX.md。”**
 
 Buddy 完成后必须：
 - 在目标项目仓库提交实际工作；
