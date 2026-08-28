@@ -6,7 +6,9 @@
 
 ### TASK-20260828-AIC-MIGRATION
 
-- status: ASSIGNED
+- status: DONE
+- completed_commit: 78cd0db (watanuo1982/-ai-content)
+- result: AI Content 历史资产已完整迁移为独立仓库（content 11 / reviews 11 / tasks 9 / xiaohongshu 2 + PROJECT_CONTEXT/README/CURRENT_STATE/DECISIONS/CHANGELOG/CONTRIBUTING），迁移前后文件清单/路径/内容核对一致（0 缺失），详见 -ai-content/CURRENT_STATE.md。源 -work-buddy-lab/ai-content 保留为 legacy 快照。
 - project: ai-content
 - repository: `watanuo1982/-ai-content`
 - task: 将原 `watanuo1982/-work-buddy-lab/ai-content/` 完整迁移为独立项目仓库
@@ -19,7 +21,9 @@
 
 ### TASK-20260828-QT-P2B
 
-- status: ASSIGNED
+- status: DONE
+- completed_commit: d533720 (watanuo1982/-quantitative-trading, research/p2b_bp_rev20_blind/)
+- result: P2-B 盲测复现完成。数据逐位复现 P1-B（4组回测 bit-for-bit 一致）；Judge=NO_JOINT_ALPHA（组合层面年化超额+11.35% 但 t=0.70 不显著，Bootstrap CI 含0；因子层面交叉五分位 spread 年化+27.10% 且 t=2.00 显著）；Benchmark 判定通过。未修改 V7.1 生产代码。
 - project: quantitative-trading
 - repository: `watanuo1982/-quantitative-trading`
 - task: P2-B — BP × REV20 Blind Reproduction Benchmark
