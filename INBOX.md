@@ -26,6 +26,19 @@
 - completed_commit: `d533720`
 - result: P2-B BP × REV20 Blind Reproduction Benchmark 已完成并通过 benchmark；未修改 V7.1 生产代码。
 
+### TASK-20260828-QT-P2C
+
+- status: DONE
+- completed_commit: e6bcbce (watanuo1982/-quantitative-trading, research/P2-C_portfolio_translation/)
+- result: P2-C 组合翻译实验完成。三种翻译（C1 宽度 N=3/5/10/20、C2 显式交互项 λ 网格、C3 高-高五分位层）均未能把 BP×REV20 联合结构翻译成统计可靠组合超额；Judge=NO_VALIDATED_CANDIDATE（全样本最佳 t=1.522<1.645 临界，所有 Bootstrap CI 含 0，无候选满足 improves_reliability AND survives_oos）。C1_N3 控制组与 P2-B bp_rev20 逐位一致（+11.35%），证明 P2-B 的 NO_JOINT_ALPHA 稳健。V7.1 冻结未改，不开 V7.2。建议在 ChatGPT Review 中与 P2-B 一并审视。
+- project: quantitative-trading
+- repository: `watanuo1982/-quantitative-trading`
+- task: P2-C — BP×REV20 Portfolio Translation
+- instruction: 进入 `-quantitative-trading`，读取 `NEXT_WORK.md` 与 `research/P2-C_portfolio_translation/spec.md`，按 V7.1 冻结框架执行组合翻译实验；不修改 V7.1 生产策略代码。
+- completion: 在量化项目仓库完成实验、证据、报告并 commit；回到本 Hub 更新状态并给 commit SHA。
+- assigned_by: User (direct command "执行 P2-C")
+- assigned_at: 2026-08-28
+
 ## 通知协议
 
 ChatGPT 不在本文件复制项目任务正文。
