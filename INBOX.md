@@ -39,6 +39,19 @@
 - assigned_by: User (direct command "执行 P2-C")
 - assigned_at: 2026-08-28
 
+### TASK-20260828-QT-P2D
+
+- status: DONE
+- completed_commit: 9fe8def (watanuo1982/-quantitative-trading, research/research_memory/)
+- result: P2-D Research Memory 完成。把 P0-PIT / P1-A / P1-B / P2-A / P2-B / P2-C 全部标准化存入 `research/research_memory/`（SCHEMA.md 条目契约 + INDEX.md 人工检索 + manifest.json 机器检索 + entries/ 6 个快照），形成可检索、可累积的研究历史。边界：V7.1 冻结构建未改，历史条目不覆盖。
+- project: quantitative-trading
+- repository: `watanuo1982/-quantitative-trading`
+- task: P2-D — Research Memory
+- instruction: 进入 `-quantitative-trading`，按基准路线图 §P2-D 把已完成实验结果标准化为可检索研究历史存入 GitHub。
+- completion: 在量化项目仓库完成研究记忆层、commit；回到本 Hub 更新状态并给 commit SHA。
+- assigned_by: User (direct command "GitHub 有新任务，执行 P2-D")
+- assigned_at: 2026-08-28
+
 ## 通知协议
 
 ChatGPT 不在本文件复制项目任务正文。
