@@ -26,7 +26,7 @@
 
 - **性质**：候选的跨项目态势汇总层，用于一屏纵览三业务仓库 + Hub 的 Issue；**不是任务入口，不替代 Issue**。
 - **形态**：用户级（user-level）Project，归属 `agent-lab`；仓库级 Project 无法跨多个仓库，故不可用。
-- **当前状态**：已建立 `AI Venture Control Tower`（用户级，私有），含 Portfolio / Attention 两视图与五字段（Project / Stage / Status / Priority / Next Decision），纳入 3 个 Issue。
+- **当前状态**：设计已确定，但当前尚未实际建立，因 Projects v2 权限/工具链限制而 BLOCKED——`AI Venture Control Tower`（用户级，私有），含 Portfolio / Attention 两视图与五字段（Project / Stage / Status / Priority / Next Decision），纳入 3 个 Issue。
 - **已知限制（维持认知，不因本次任务改变）**：
   - 视图的 group by / filter 无法经 API 设置，需在网页端补充；
   - 新 Issue 不会自动进入 Project，需手动纳项；
