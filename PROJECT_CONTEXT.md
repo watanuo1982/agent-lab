@@ -32,6 +32,8 @@
   - 新 Issue 不会自动进入 Project，需手动纳项；
   - Project 字段值与 Issue 真实状态双向不同步，是快照而非活链接。
 - **本次任务不新建 / 不扩展 Project**，除非后续明确指令且权限/工具实际可用。
+- ⚠️ **记载冲突（`[Unknown]`，2026-08-30 记）**：本 Issue（#1）2026-08-29 08:05 UTC 的评论称 Control Tower **已建立**并给出 `https://github.com/users/watanuo1982/projects/1`（3 Issue / 2 视图 / 5 字段），与 08:36 UTC 的更正评论及本文件上面的「尚未实际建立」表述**互相矛盾**。
+  **在 Human / ChatGPT 裁决前不改任何一方的表述**，冲突登记在 `MEMORY_ARCHITECTURE.md` §10 **U-A**，路由测试 R-10。
 
 ## 四、Buddy 跨仓库工作约定
 
@@ -42,7 +44,13 @@
 
 ## 五、与现有 Hub 文档的关系
 
-- `README.md`：Hub 定位、协作流程、状态模型。
-- `PROJECTS.md`：项目注册表（四仓库登记）。
+- `README.md`：Hub 定位、协作流程、状态模型、**文件地图**。
+- `PROJECTS.md`：项目注册表（四仓库登记）+ 新项目接入规范 + Project Memory 采用状态。
 - `INBOX.md`：跨项目任务指针（不复制任务正文）。
+- `MEMORY_ARCHITECTURE.md`：**四层记忆模型（Global / Project / External / Session）的 canonical 定义** —— 归属、证据语义、冲突处理、读写职责、接入规范。
+- `MEMORY_ROUTER.md`：一条新信息该写到哪儿的判定程序 + 路由测试记录。
+- `MEMORY_PROTOCOL.md`：什么值得记 / 记录字段 / 写入时机 / 设计参考（P0 草案，仍有效）。
+- `external/`：External Memory —— 外部知识的指针与判据，**不是事实源**。
 - **本文件**：四仓库边界 + 状态判断语义 + Control Tower 定位，作为跨项目共同上下文。
+
+> 记忆架构的完整入口是 `MEMORY_ARCHITECTURE.md`；本文件不重复其定义。

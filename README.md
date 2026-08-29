@@ -11,6 +11,33 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - ChatGPT → Work Buddy 的跨项目任务通知（`INBOX.md`）
 - 跨项目状态指针
 - 通用协作协议
+- 跨项目记忆架构（见下节文件地图）
+
+## 文件地图
+
+记忆分为四层，完整定义见 `MEMORY_ARCHITECTURE.md`，路由规则见 `MEMORY_ROUTER.md`。
+
+| 层 | 位置 | 管什么 |
+|---|---|---|
+| **Global** | 本仓库 | 项目地图、跨项目原则、协作协议、Memory 协议 |
+| **Project** | 各业务仓库 | 该项目自己的目标、状态、决策、研究、实验、下一步 |
+| **External** | `external/` | 外部知识/工具/来源的**指针与判据**，不是事实源 |
+| **Session** | 不落盘 | 本次对话的中间过程，默认不进入长期记忆 |
+
+**Hub 层文件**
+
+| 文件 | 职责 |
+|---|---|
+| `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
+| `PROJECT_CONTEXT.md` | 四仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
+| `MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
+| `MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
+| `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
+| `INBOX.md` | 跨项目任务指针（不复制任务正文） |
+| `external/` | External Memory（指针 + 判据） |
+| `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
+
+> ⚠️ Hub **不存放**任何业务项目的详细内容；业务事实一律留在业务仓库。
 
 ## 仓库边界
 

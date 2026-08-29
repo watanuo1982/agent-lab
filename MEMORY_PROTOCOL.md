@@ -2,6 +2,18 @@
 
 > P0 experiment, 2026-08-29. This protocol adapts ideas from current open-source agent-memory systems to the existing ChatGPT ↔ GitHub ↔ Work Buddy workflow.
 
+> ## 归属说明（2026-08-30，agent-lab Issue #2）
+>
+> 本文件是 **P0 记忆协议草案**，**仍然有效**，保留其独有内容：
+> §4 什么值得记 · §5 记录语义 · §6 写入时机 · §10 P0 成功标准 · §11 rollout · §12 设计参考。
+>
+> **四层记忆模型（Global / Project / External / Session）与路由规则的 canonical 归属是**
+> **`MEMORY_ARCHITECTURE.md` 与 `MEMORY_ROUTER.md`**；本文件不再重复定义。
+>
+> ⚠️ **SUPERSEDED**：本文件 §2 只定义了 Global / Project 两层。
+> **External 与 Session 两层以 `MEMORY_ARCHITECTURE.md` §2.3 / §2.4 为准。**
+> §9 的仓库隔离原则仍有效，并由 `MEMORY_ARCHITECTURE.md` §4 的 canonical 表细化。
+
 ## 1. Purpose
 
 GitHub is the durable source of truth for project state. Memory is not a copy of chat history. It is a curated, versioned representation of facts that must survive across conversations and agents.
