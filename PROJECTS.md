@@ -4,6 +4,7 @@
 |---|---|---|---|---|
 | quantitative-trading | `watanuo1982/-quantitative-trading` | 量化研究 / 实盘策略 | ACTIVE | 独立项目，所有策略、数据、实验、报告留在本仓库 |
 | ai-content | `watanuo1982/-ai-content` | AI 内容生产 | ACTIVE | 独立项目，内容、任务、Review、平台实验留在本仓库 |
+| commercial-radar | `watanuo1982/-commercial-radar` | 商业机会雷达 / ToC 选品 | ACTIVE | 独立项目，任务走本仓库 GitHub Issues；选品流水线、评分模型、实验记录留在本仓库 |
 | agent-hub | `watanuo1982/agent-lab` | 跨项目协作基础设施 | ACTIVE | 仅负责项目注册、跨项目通知和协作协议 |
 
 > `-work-buddy-lab` 已从 GitHub 账户的当前仓库列表中消失，已确认删除。本注册表不再把它作为项目记录。
