@@ -81,6 +81,17 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 
 **具体任务统一使用 Project Repo 的 GitHub Issue。** 文件用于知识、状态、导航和成果沉淀，不再作为任务派发的第二套系统。
 
+### Issue-first 规则（任务唯一载体，强制）
+
+> **所有交给 Buddy 执行的可审计任务，必须先有对应 GitHub Issue 作为唯一任务载体；聊天消息（含本 Hub 的 `INBOX.md` 指针）只作通知 / 补充，不替代 Issue。**
+>
+> 生命周期（强制顺序）：
+> `Issue（ChatGPT 建，写清 Objective / Scope / Constraints / DoD） → Buddy 执行 → Commit / Push → Issue 回报 DONE / BLOCKED → ChatGPT Review → VERIFIED / CLOSED`
+>
+> - 没有对应 Issue 的任务，Buddy 不应视为已授权执行；ChatGPT 定义新任务时必须在业务仓库建 Issue，不在 Hub 写任务正文。
+> - 聊天里的口头指令只通过「Human 通知 Buddy 有新 Issue」进入执行，任务内容以 Issue 正文为准。
+> - 本规则是各业务仓库 `GITHUB_WORKFLOW.md` 的上层总原则，不与之冲突。
+
 ## 标准任务流程
 
 1. ChatGPT 在对应 Project Repo 创建 Issue，写清 Objective、Scope、Constraints、Deliverables 和 Definition of Done。

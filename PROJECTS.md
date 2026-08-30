@@ -2,13 +2,13 @@
 
 | Project ID | Repository | 类型 | 状态 | Project Memory | 说明 |
 |---|---|---|---|---|---|
-| quantitative-trading | `watanuo1982/-quantitative-trading` | 量化研究 / 实盘策略 | ACTIVE | `[Unknown]` 未核实 | 独立项目，所有策略、数据、实验、报告留在本仓库 |
-| ai-content | `watanuo1982/-ai-content` | AI 内容生产 | ACTIVE | `[Unknown]` 未核实 | 独立项目，内容、任务、Review、平台实验留在本仓库 |
+| quantitative-trading | `watanuo1982/-quantitative-trading` | 量化研究 / 实盘策略 | ACTIVE | **ADOPTED**（P1-A, commit `51696258698ff2c29f903f7986ee4e9f40f47004`） | 独立项目，所有策略、数据、实验、报告留在本仓库 |
+| ai-content | `watanuo1982/-ai-content` | AI 内容生产 | ACTIVE | **ADOPTED**（P1-B, commit `fad8b740f8ee4041049c18999edccde642a56d30`） | 独立项目，内容、任务、Review、平台实验留在本仓库 |
 | commercial-radar | `watanuo1982/-commercial-radar` | 商业机会雷达 / ToC 选品 | ACTIVE | **ADOPTED**（Issue #9, `b29eebf`） | 独立项目，任务走本仓库 GitHub Issues；选品流水线、评分模型、实验记录留在本仓库。**已验证参考实现** |
 | agent-hub | `watanuo1982/agent-lab` | 跨项目协作基础设施 | ACTIVE | **不适用**（本层即 Global Memory v0.1，Issue #2） | 项目注册、跨项目通知、协作协议、记忆架构 |
 
 > `Project Memory` 列记录该项目是否已建立 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` 等最小记忆集合。
-> `quantitative-trading` 与 `ai-content` 的 `[Unknown]` 来自 agent-lab Issue #2 的 Non-goals —— **明确不迁移这两个仓库，因此也未核实其现状**（登记于 `MEMORY_ARCHITECTURE.md` §10 U-B / U-C）。
+> `quantitative-trading` 与 `ai-content` 的 Project Memory 现状原在 agent-lab Issue #2 因 Non-goals 不迁移业务仓库而标 `[Unknown]` 未核实；**已于 P1-C（agent-lab Issue #3）经 P1-A（qt，commit `5169625`）与 P1-B（ai-content，commit `fad8b740`）核实并标 RESOLVED**，见 `MEMORY_ARCHITECTURE.md` §10 U-B / U-C，本表对应行改为 **ADOPTED**。
 
 > `-work-buddy-lab` 已从 GitHub 账户的当前仓库列表中消失，已确认删除。本注册表不再把它作为项目记录。
 
@@ -17,6 +17,8 @@
 新项目必须建立**独立 repository**，然后在本文件登记，并建立最小 Project Memory。
 
 **必须（缺一不可）**
+
+> ⚠️ **P0.6 跨会话恢复实测产物独立归档于 `memory-tests/`**（`run-2026-08-30/` 含 s1/s2/s3 冷启动答案 + `summary.md`），不依赖任何 GitHub Issue 作载体；当时 Issue #3 尚不存在。
 
 1. `README.md` —— 项目是什么、怎么跑、边界在哪。
 2. `PROJECT_CONTEXT.md` —— 定位、边界、长期原则、**事实唯一归属表**、证据语义、新会话恢复路径。

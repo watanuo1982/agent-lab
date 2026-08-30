@@ -66,6 +66,7 @@ research/  experiments/  radar/  ……  证据、研究、实验、机会资产
 **已有同等作用文件的，保留原文件，不为了凑齐清单而制造第二份事实源。**
 
 参考实现：`-commercial-radar`（Issue #9，commit `b29eebf`）—— 已验证「新会话只读仓库即可恢复项目上下文」。
+其后 `-quantitative-trading`（P1-A，commit `5169625`）与 `-ai-content`（P1-B，commit `fad8b740`）也完成对齐，Project Memory 列均为 ADOPTED（见 `PROJECTS.md`）。
 
 ### 2.3 External Memory — `external/`
 
@@ -125,7 +126,9 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 > **修订记录（2026-08-30）**：v0.1 本节只写了「Global 优先于 Project」与「External 与 Project 的消解」，
 > **未显式定义 Global 与 External 的相对顺序**，而 `MEMORY_ROUTER.md` §1 把 External 排在 Global 之前。
 > 两者读起来像两个不同的答案 —— 由跨会话恢复实测第一轮 G4 题暴露（新会话按本节答、按 Router 答，结果相反）。
-> 本次已补全为显式全序。详见 `memory-tests/2026-08-30_cross_session_recovery_test.md` F-2。
+> 本次已补全为显式全序。详见 `memory-tests/run-2026-08-30/summary.md` F-2。
+>
+> **P0.6 跨会话恢复实测产物已自包含于 `memory-tests/`**（题库 `protocol.md` + 三份冷启动答案 `run-2026-08-30/{s1,s2,s3}_answer.md` + `summary.md`），不依赖任何 GitHub Issue 作载体；实测当时 Issue #3 尚不存在，结论独立归档。Issue #3 现为 P1-C（Global Memory 收口），与 P0.6 实测无关。
 
 ---
 
@@ -186,7 +189,7 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 
 - **读**：进 Hub → `PROJECT_CONTEXT.md` → 目标仓库 Project Memory → 具体 Issue。
 - **写**：只在**目标仓库** commit/push；只有跨项目索引与协议变更才落在 `agent-lab`。
-- **禁止**：自行把 `[Inference]` 升为 `[Fact]`、自行裁决 `[Unknown]`、自行扩大任务范围。
+- **禁止**：自行把 `[Inference]` 升为 `[Fact]`、自行裁决 `[Unknown]`、自行扩大任务范围、**在没有对应 GitHub Issue 的情况下把聊天消息当作已授权任务执行**（任务唯一载体规则见 `README.md` 协作方式）。
 - **触发更新**：Issue 执行完成并 commit 后 → 更新目标项目 `CURRENT_STATE.md` / `NEXT_WORK.md`；协议或项目地图变化时 → 更新 Hub。
 
 ### Human
@@ -245,8 +248,8 @@ agent-lab/README.md
 | ID | 内容 | 状态 |
 |---|---|---|
 | U-A | **Control Tower（AI Venture Control Tower）究竟是否已建立** —— `agent-lab` #1 评论（2026-08-29 08:05 UTC）称已建立并给出 `https://github.com/users/watanuo1982/projects/1`（3 Issue / 2 视图 / 5 字段）；同一 Issue 评论（08:36 UTC）与 `PROJECT_CONTEXT.md` §3 称「尚未实际建立，BLOCKED」。两者矛盾，`[Unknown]`，不在此裁决。 | 待 Human / ChatGPT 裁决 |
-| U-B | `quantitative-trading` 是否已经存在 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` 等 Project Memory 文件。本 Issue 的 Non-goals 明确不迁移该仓库，故**未核实**。 | 待核实（下一 Issue） |
-| U-C | `-ai-content` 同上。 | 待核实（下一 Issue） |
+| U-B | `quantitative-trading` 是否已存在完整 Project Memory。**已核实 → RESOLVED**：经 P1-A Memory Alignment（qt Issue #1，commit `51696258698ff2c29f903f7986ee4e9f40f47004`）确认存在 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` / `DECISIONS.md` / `MEMORY_INDEX.md` 全集合，并保留成熟的 `research/research_memory/`（INDEX/SCHEMA/manifest/6 条目 + verdict）。原「待核实」系 agent-lab Issue #2（本架构）Non-goals 明确不迁移业务仓库所致，非现状。 | **RESOLVED**（2026-08-30，P1-C；证据：qt Issue #1 + commit `5169625`） |
+| U-C | `-ai-content` 是否已存在完整 Project Memory。**已核实 → RESOLVED**：经 P1-B Memory Alignment（-ai-content Issue #2，commit `fad8b740f8ee4041049c18999edccde642a56d30`）确认存在 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` / `DECISIONS.md` / `MEMORY_INDEX.md`（新建）+ `GITHUB_WORKFLOW.md` / `README.md` / `CHANGELOG.md` 全套，并声明 Evidence 五标记与 External 边界（A1–A6）。原「待核实」系 agent-lab Issue #2（本架构）Non-goals 明确不迁移业务仓库所致。 | **RESOLVED**（2026-08-30，P1-C；证据：-ai-content Issue #2 + commit `fad8b740`） |
 | U-D | 用户长期工作偏好（输出格式、决策方式等）目前只存在于 Buddy 本地 memory，不在 Git。**来源不在 Git 且未经 Human 确认，本期不升为 Global 事实。** | 待 Human 确认后由 ChatGPT 决定是否纳入 |
 | U-E | External Memory 的实际收益未验证 —— `external/` 目前只有种子条目，还没有被两个以上项目真实引用。 | 待使用后再评估 |
 | U-F | `-work-buddy-lab` 的状态不一致 —— `README.md` 记为「FROZEN」并仍列在仓库边界里，`PROJECTS.md` 记为「已从 GitHub 账户消失，已确认删除」。两者未对齐。本期**不改任何一方**（超出 Issue #2 范围，且删除声明需要 Human 确认）。 | 待 Human 确认后由 ChatGPT 决定 |
