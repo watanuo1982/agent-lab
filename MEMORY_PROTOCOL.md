@@ -111,6 +111,16 @@ Task proposed
 
 The final verified result is the strongest candidate for `CURRENT_STATE.md` or `DECISIONS.md`.
 
+### 6.1 Research-only work does not automatically create a Buddy task
+
+Not every durable conclusion requires a GitHub Issue or Work Buddy execution. When ChatGPT is only researching, comparing, evaluating, or designing a method—and no repository change or external execution is required—the work should normally remain a ChatGPT-side research activity until a durable conclusion is established.
+
+When the conclusion is durable and cross-project, record the external source as `External Memory` and record our own adopted/rejected rule in the appropriate `Global Memory` file. When it is specific to one project, record the decision in that project's canonical memory.
+
+Create a Buddy task only when there is an actual executable repository/project change, experiment, or other auditable action for Buddy to perform. Do not create Issues merely to preserve conversation history or to make research look operational.
+
+**Default rule:** `Research / evaluation / design → ChatGPT`; `repository execution / experiment / auditable delivery → GitHub Issue → Buddy`.
+
 ## 7. Read policy
 
 When entering a project, read in this order:
