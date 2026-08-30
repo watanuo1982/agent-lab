@@ -36,6 +36,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
+| `memory-tests/` | 跨会话恢复实测记录（**含题库与答案，做恢复测试时必须排除**，见 `memory-tests/README.md`） |
 
 > ⚠️ Hub **不存放**任何业务项目的详细内容；业务事实一律留在业务仓库。
 
@@ -49,6 +50,12 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - `-ai-content`：AI 内容生产
 - `-commercial-radar`：商业机会雷达
 - `-work-buddy-lab`：历史 Work Buddy 工具协作实验，FROZEN
+
+> ⚠️ **两处记载不一致（U-F）**：本清单列 **5** 个仓库（含 `-work-buddy-lab` FROZEN）；
+> `PROJECTS.md` 的注册表只列 **4** 个，并记 `-work-buddy-lab`「已从 GitHub 账户消失，已确认删除」。
+> 该冲突已登记于 `MEMORY_ARCHITECTURE.md` §10 **U-F**，**待 Human / ChatGPT 裁决，Buddy 不自行选边**。
+> 需要「现在有哪些在用项目」时请同时核对 `PROJECTS.md`；在 U-F 裁决前，两处均不作为最终结论。
+> （此矛盾由 2026-08-30 跨会话恢复实测第一轮暴露：新会话读到的第一份文件就是本文件，第一题即撞上矛盾。）
 
 未来新项目直接新建独立 repository，并在 `PROJECTS.md` 登记。
 

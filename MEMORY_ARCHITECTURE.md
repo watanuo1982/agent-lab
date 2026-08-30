@@ -101,18 +101,31 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 
 ## 3. 判定优先级
 
-当一条信息同时像两类时，按此顺序裁决：
+当一条信息同时像两类时，按此顺序裁决（**顺序不可调换**）：
 
 1. **Session 优先排除**：只与本次对话/本次执行有关、不影响未来工作 → Session，不写。
-2. **Global 优先于 Project**：定义了协作机制、项目地图、跨项目原则 → Global。
+   （Session 是唯一有默认答案的层，必须先滤掉噪声。）
+2. **External 优先于 Global**：描述的是外部世界的第三方事物本身（开源项目 / 工具平台机制 / 论文方法论 / 他人事件），**而不是我们自己的状态或决定** → External。
+   （理由：防止把「外部平台的机制」误当成「我们的协作协议」。「GitHub Projects v2 只有 GraphQL」是 GitHub 的机制，不是我们的协议 —— 我们**据此**做的决定才是 Global/Project。）
+3. **Global 优先于 Project**：定义或改变了协作机制、项目地图、跨项目原则、Memory 协议本身 → Global。
    （某项目的经验要升为跨项目原则，必须**显式迁移**并在原处留指针，不允许两处同时写正文。）
-3. **External 与 Project 的消解**：
-   - 「外部事物**本身**是什么样的」→ **External**；
-   - 「我们**对它的判断/采用决定**」→ **Project**（或 Global，若它约束协作体系）。
 4. **Project 兜底**：只影响某一个项目 → 该项目仓库。
 5. **仍无法判定 → 不写**，标 `[Unknown]`，记入本文件 §10 或该项目 `DECISIONS.md` 的 Unknown 段，等 Human / ChatGPT 裁决。
 
-完整判定程序与示例见 `MEMORY_ROUTER.md`。
+**消解规则（最常用）**：
+
+| 形态 | 归属 |
+|---|---|
+| 外部事物**本身**是什么样的 | **External** |
+| 我们**对它的判断 / 采用决定** | **Project**（若它约束协作体系则 **Global**） |
+
+> **与 `MEMORY_ROUTER.md` 的关系**：本节是裁决原则的摘要，顺序与 `MEMORY_ROUTER.md` §1 的 Q1–Q5 **一一对应且一致**。
+> **实际判定时以 `MEMORY_ROUTER.md` §1 的操作性判问为准**，本节用于解释「为什么是这个顺序」。
+>
+> **修订记录（2026-08-30）**：v0.1 本节只写了「Global 优先于 Project」与「External 与 Project 的消解」，
+> **未显式定义 Global 与 External 的相对顺序**，而 `MEMORY_ROUTER.md` §1 把 External 排在 Global 之前。
+> 两者读起来像两个不同的答案 —— 由跨会话恢复实测第一轮 G4 题暴露（新会话按本节答、按 Router 答，结果相反）。
+> 本次已补全为显式全序。详见 `memory-tests/2026-08-30_cross_session_recovery_test.md` F-2。
 
 ---
 
