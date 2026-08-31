@@ -33,6 +33,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 | `MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
 | `MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
 | `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
+| `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
@@ -53,7 +54,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 
 > ⚠️ **两处记载不一致（U-F）**：本清单列 **5** 个仓库（含 `-work-buddy-lab` FROZEN）；
 > `PROJECTS.md` 的注册表只列 **4** 个，并记 `-work-buddy-lab`「已从 GitHub 账户消失，已确认删除」。
-> 该冲突已登记于 `MEMORY_ARCHITECTURE.md` §10 **U-F**，**待 Human / ChatGPT 裁决，Buddy 不自行选边**。
+> 该冲突已登记于 `UNKNOWN_REGISTRY.md` **U-F**，**待 Human / ChatGPT 裁决，Buddy 不自行选边**。
 > 需要「现在有哪些在用项目」时请同时核对 `PROJECTS.md`；在 U-F 裁决前，两处均不作为最终结论。
 > （此矛盾由 2026-08-30 跨会话恢复实测第一轮暴露：新会话读到的第一份文件就是本文件，第一题即撞上矛盾。）
 
@@ -87,16 +88,16 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 >
 > 生命周期（强制顺序）：
 > `Issue（ChatGPT 建，写清 Objective / Scope / Constraints / DoD） → Buddy 执行 → Commit / Push → Issue 回报 DONE / BLOCKED → ChatGPT Review → VERIFIED / CLOSED`
->
-> - 没有对应 Issue 的任务，Buddy 不应视为已授权执行；ChatGPT 定义新任务时必须在业务仓库建 Issue，不在 Hub 写任务正文。
-> - 聊天里的口头指令只通过「Human 通知 Buddy 有新 Issue」进入执行，任务内容以 Issue 正文为准。
-> - 本规则是各业务仓库 `GITHUB_WORKFLOW.md` 的上层总原则，不与之冲突。
+
+- 没有对应 Issue 的任务，Buddy 不应视为已授权执行；ChatGPT 定义新任务时必须在业务仓库建 Issue，不在 Hub 写任务正文。
+- 聊天里的口头指令只通过「Human 通知 Buddy 有新 Issue」进入执行，任务内容以 Issue 正文为准。
+- 本规则是各业务仓库 `GITHUB_WORKFLOW.md` 的上层总原则，不与之冲突。
 
 ## 标准任务流程
 
 1. ChatGPT 在对应 Project Repo 创建 Issue，写清 Objective、Scope、Constraints、Deliverables 和 Definition of Done。
 2. Human 通知 Buddy 有新 Issue。
-3. Buddy 从 Issue 获取任务，不依赖聊天上下文；开始执行后将 `STATUS` 更新为 `IN_PROGRESS`。
+3. Buddy 从 Issue 获取任务，不依赖聊天上下文；开始执行后将当前状态标记为 `IN_PROGRESS`。
 4. Buddy 完成后 commit/push，并在 Issue 回报 `STATUS: DONE`、验证结果、Artifacts 和 commit SHA；无法完成则回报 `STATUS: BLOCKED`。
 5. ChatGPT 检查 commit、成果和 Definition of Done。
 6. 通过后 ChatGPT 在 Issue 回报 `STATUS: VERIFIED` 并关闭 Issue；需要继续工作则创建下一 Issue。
@@ -109,7 +110,9 @@ READY → IN_PROGRESS → DONE → VERIFIED → CLOSED
                      ↘ BLOCKED
 ```
 
-GitHub 原生 Open/Closed 是最终状态；Issue 正文中的 `STATUS:` 是协作流程状态。
+**状态元数据原则**：GitHub Issue Label / Project field（如可用）是当前状态的机器可查询表达；Issue 评论中的 `STATUS:` 是审计日志，不再作为唯一 current-state authority。GitHub 原生 Open/Closed 仍是 Issue 生命周期的最终状态。
+
+当前兼容期允许继续写 `STATUS:` 评论，以保持既有历史流程可读；新工具或自动化不得依赖扫描历史评论来推断唯一当前状态。
 
 ## ChatGPT ↔ Buddy 的默认交互
 
@@ -120,7 +123,7 @@ Human 告知 Buddy 有新任务
         ↓
 Buddy 执行 + Commit/Push
         ↓
-Buddy 回写 Issue：DONE / BLOCKED
+Buddy 回写 Issue：状态元数据 + STATUS 审计日志
         ↓
 ChatGPT Review
         ↓
