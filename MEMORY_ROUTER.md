@@ -30,8 +30,8 @@ Q4  I 只影响某一个具体项目？
     ├── 是 → PROJECT（该项目仓库）
     └── 否 ↓
 
-Q5  无法判定 → 不写。标 [Unknown]，记入 `UNKNOWN_REGISTRY.md`，
-    并在 `MEMORY_ARCHITECTURE.md §10` 保留背景/证据指针，等 Human / ChatGPT 裁决。
+Q5  无法判定 → 不写入事实层。标 `[Unknown]`，**必须登记 `UNKNOWN_REGISTRY.md`**，
+    由 Human / ChatGPT 按 Registry 生命周期复查与裁决。不得只写在其他 Hub Markdown 表格中。
 ```
 
 ### 关于 Q2 / Q3 / Q4 的顺序
