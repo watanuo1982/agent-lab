@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  issues: read
+
 jobs:
   validate-memory:
     runs-on: ubuntu-latest
@@ -13,4 +17,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Validate Global / Project Memory structure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/validate_memory_structure.py
