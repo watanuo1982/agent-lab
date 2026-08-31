@@ -8,9 +8,9 @@
 | agent-hub | `watanuo1982/agent-lab` | 跨项目协作基础设施 | ACTIVE | **不适用**（本层即 Global Memory v0.1，Issue #2） | 项目注册、跨项目通知、协作协议、记忆架构 |
 
 > `Project Memory` 列记录该项目是否已建立 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` 等最小记忆集合。
-> `quantitative-trading` 与 `ai-content` 的 Project Memory 现状原在 agent-lab Issue #2 因 Non-goals 不迁移业务仓库而标 `[Unknown]` 未核实；**已于 P1-C（agent-lab Issue #3）经 P1-A（qt，commit `5169625`）与 P1-B（ai-content，commit `fad8b740`）核实并标 RESOLVED**，见 `MEMORY_ARCHITECTURE.md` §10 U-B / U-C，本表对应行改为 **ADOPTED**。
+> `quantitative-trading` 与 `ai-content` 的 Project Memory 现状原在 agent-lab Issue #2 因 Non-goals 不迁移业务仓库而标 `[Unknown]` 未核实；**已于 P1-C（agent-lab Issue #3）经 P1-A（qt，commit `5169625`）与 P1-B（ai-content，commit `fad8b740`）核实并标 RESOLVED**，见 `UNKNOWN_REGISTRY.md` U-B / U-C，本表对应行改为 **ADOPTED**。
 
-> `-work-buddy-lab` 已从 GitHub 账户的当前仓库列表中消失，已确认删除。本注册表不再把它作为项目记录。
+> `-work-buddy-lab` 已从 GitHub 账户的当前仓库列表中消失，已确认删除。本注册表不再把它作为项目记录。若与其他 Hub 文件发生冲突，统一登记到 `UNKNOWN_REGISTRY.md`，不得在本表自行选边。
 
 ## 新项目接入最小规范
 
@@ -24,10 +24,10 @@
 2. `PROJECT_CONTEXT.md` —— 定位、边界、长期原则、**事实唯一归属表**、证据语义、新会话恢复路径。
 3. `CURRENT_STATE.md` —— 当前阶段与当前已证实结论。
 4. `NEXT_WORK.md` —— 当前导航与待办摘要。
-5. `GITHUB_WORKFLOW.md`（可直接沿用 `-commercial-radar` 的协议）—— Issue 生命周期、`STATUS:` 写在评论正文、DoD 模板。
+5. `GITHUB_WORKFLOW.md`（可直接沿用 `-commercial-radar` 的协议）—— Issue 生命周期、状态元数据与 `STATUS:` 审计日志、DoD 模板。
 6. 在本表登记，并把 `Project Memory` 列标为 `ADOPTED`。
 
-**建议**：`DECISIONS.md`、`MEMORY_INDEX.md`、`CHANGELOG.md`。
+建议：`DECISIONS.md`、`MEMORY_INDEX.md`、`CHANGELOG.md`。
 
 **不需要**：数据库、向量检索、记忆服务。文件-first 基线的效果没被测量之前，不引入这些依赖。
 
