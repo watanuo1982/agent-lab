@@ -1,0 +1,16 @@
+name: Memory Structure Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-memory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate Global / Project Memory structure
+        run: python3 scripts/validate_memory_structure.py
