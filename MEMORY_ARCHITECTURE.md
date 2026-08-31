@@ -6,10 +6,11 @@
 >
 > | 需要什么 | 去哪里 |
 > |---|---|
-> | 一条新信息该写到哪儿 | `MEMORY_ROUTER.md`（判定程序 + 路由测试） |
+> | 一条新信息该写到哪儿 | `MEMORY_ROUTER.md`（唯一操作性判定程序 + 路由测试） |
 > | 什么值得记 / 记录字段 / 写入时机 | `MEMORY_PROTOCOL.md`（P0 草案，仍有效） |
 > | 已落地的 Project Memory 长什么样 | `watanuo1982/-commercial-radar`，由该仓库 Issue #9 交付 |
 > | 外部知识/工具/来源 | `external/` |
+> | Unknown 的登记、复查与裁决状态 | `UNKNOWN_REGISTRY.md`（唯一登记表） |
 >
 > ⚠️ `MEMORY_PROTOCOL.md` §2 只定义了 Global / Project 两层。**External 与 Session 两层以本文件为准（SUPERSEDED）。**
 
@@ -42,6 +43,7 @@
 | `MEMORY_ARCHITECTURE.md` | 本文件：四层模型、归属、证据语义、冲突处理、读写职责 |
 | `MEMORY_ROUTER.md` | 路由判定程序与路由测试记录 |
 | `MEMORY_PROTOCOL.md` | 记录语义、写入时机、P0 成功标准、设计参考 |
+| `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
 | `INBOX.md` | 跨项目任务**指针**（不复制任务正文） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档（指针 + commit + 一句结果） |
 
@@ -102,33 +104,22 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 
 ## 3. 判定优先级
 
-当一条信息同时像两类时，按此顺序裁决（**顺序不可调换**）：
+当一条信息同时像两类时，实际判定以 `MEMORY_ROUTER.md` §1 的唯一操作性规则为准；本节只解释四层模型下的优先级原则，不复制 Q1–Q5。
 
-1. **Session 优先排除**：只与本次对话/本次执行有关、不影响未来工作 → Session，不写。
-   （Session 是唯一有默认答案的层，必须先滤掉噪声。）
-2. **External 优先于 Global**：描述的是外部世界的第三方事物本身（开源项目 / 工具平台机制 / 论文方法论 / 他人事件），**而不是我们自己的状态或决定** → External。
-   （理由：防止把「外部平台的机制」误当成「我们的协作协议」。「GitHub Projects v2 只有 GraphQL」是 GitHub 的机制，不是我们的协议 —— 我们**据此**做的决定才是 Global/Project。）
-3. **Global 优先于 Project**：定义或改变了协作机制、项目地图、跨项目原则、Memory 协议本身 → Global。
-   （某项目的经验要升为跨项目原则，必须**显式迁移**并在原处留指针，不允许两处同时写正文。）
-4. **Project 兜底**：只影响某一个项目 → 该项目仓库。
-5. **仍无法判定 → 不写**，标 `[Unknown]`，记入本文件 §10 或该项目 `DECISIONS.md` 的 Unknown 段，等 Human / ChatGPT 裁决。
+- Session 优先排除：只与本次对话/执行有关、不影响未来工作 → Session，不写。
+- External 优先于 Global：第三方事物本身 → External；我们据此做的决定 → Global/Project。
+- Global 优先于 Project：跨项目协作机制、项目地图、Memory 协议 → Global。
+- Project 兜底：只影响一个项目 → Project。
+- 无法判定：按 Router Q5 进入 `UNKNOWN_REGISTRY.md`，不猜、不留白。
 
-**消解规则（最常用）**：
+### 消解规则（最常用）
 
 | 形态 | 归属 |
 |---|---|
 | 外部事物**本身**是什么样的 | **External** |
 | 我们**对它的判断 / 采用决定** | **Project**（若它约束协作体系则 **Global**） |
 
-> **与 `MEMORY_ROUTER.md` 的关系**：本节是裁决原则的摘要，顺序与 `MEMORY_ROUTER.md` §1 的 Q1–Q5 **一一对应且一致**。
-> **实际判定时以 `MEMORY_ROUTER.md` §1 的操作性判问为准**，本节用于解释「为什么是这个顺序」。
->
-> **修订记录（2026-08-30）**：v0.1 本节只写了「Global 优先于 Project」与「External 与 Project 的消解」，
-> **未显式定义 Global 与 External 的相对顺序**，而 `MEMORY_ROUTER.md` §1 把 External 排在 Global 之前。
-> 两者读起来像两个不同的答案 —— 由跨会话恢复实测第一轮 G4 题暴露（新会话按本节答、按 Router 答，结果相反）。
-> 本次已补全为显式全序。详见 `memory-tests/run-2026-08-30/summary.md` F-2。
->
-> **P0.6 跨会话恢复实测产物已自包含于 `memory-tests/`**（题库 `protocol.md` + 三份冷启动答案 `run-2026-08-30/{s1,s2,s3}_answer.md` + `summary.md`），不依赖任何 GitHub Issue 作载体；实测当时 Issue #3 尚不存在，结论独立归档。Issue #3 现为 P1-C（Global Memory 收口），与 P0.6 实测无关。
+> **与 `MEMORY_ROUTER.md` 的关系**：Router §1 是唯一操作性判定源；本节不再重复 Q1–Q5 正文。
 
 ---
 
@@ -141,6 +132,7 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 | 外部工具/项目/平台机制/方法论 | `external/`（指针 + 判据） | 抄进项目当事实 |
 | 本次对话的中间过程、临时状态 | 不落盘 | 自动进长期记忆 |
 | 具体任务合同、执行状态、Review 结论 | GitHub Issue（业务仓库） | 另建任务系统 |
+| Unknown 登记、复查、裁决状态 | `UNKNOWN_REGISTRY.md` | 在其他 Hub 文档复制登记表 |
 | 历史演进 | `CHANGELOG.md` + `archive/` | 删除旧版本 |
 | 最终版本历史 | Git history | 用文档覆盖提交记录 |
 
@@ -158,7 +150,7 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 | `[Inference]` | 从 `[Fact]` 推出来的结论 | 必须能说出推理链，说不出就降级 |
 | `[Assumption]` | 为推进工作而暂设的前提 | 必须写明「待什么数据回归」 |
 | `[Experiment]` | 真实世界验证事件 | **只有真实客户同意测试、首笔真实付费、可量化 before/after 才成立** |
-| `[Unknown]` | 不知道 / 无法确认 / 记载互相矛盾 | 不许猜，不许留白 |
+| `[Unknown]` | 不知道 / 无法确认 / 记载互相矛盾 | 不许猜，不许留白；登记到 `UNKNOWN_REGISTRY.md` |
 
 `[Experiment]` 的红线（沿用 `-commercial-radar`，Hub 层统一）：
 平台报价、论坛帖子、GitHub stars、合成 fixture、自测输出 —— **一律不算**。
@@ -173,7 +165,7 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 2. **再定文件** —— 同层内按 §4 表找到唯一 canonical 文件；两处都像就改一处、另一处留指针。
 3. **旧事实不删除** —— 标记为 `SUPERSEDED` 并写明新的 canonical 在哪，保留原文。删除历史会让下游无法审计。
 4. **Git history 是最终仲裁** —— 文档与提交记录冲突时，以提交记录为准，然后把文档改对。
-5. **真不知道就写 `[Unknown]`** —— 记载互相矛盾时，两种说法都保留并标 `[Unknown]`，等 Human / ChatGPT 裁决；**Buddy 不自行选边**。
+5. **真不知道就写 `[Unknown]`** —— 记载互相矛盾时，两种说法都保留并标 `[Unknown]`，登记 `UNKNOWN_REGISTRY.md`；**Buddy 不自行选边**。
 
 ---
 
@@ -209,24 +201,19 @@ Session 中产生的**工作产物**（代码、数据、报告）按其性质�
 
 ## 8. 新项目接入最小规范
 
-新项目 = **建独立 repository** → 在 `PROJECTS.md` 登记 → 建立最小 Project Memory。
+每个新项目必须：
 
-**必须（缺一不可）**：
-
-1. `README.md` —— 项目是什么、怎么跑、边界在哪。
-2. `PROJECT_CONTEXT.md` —— 定位、边界、长期原则、**事实唯一归属表**、证据语义、新会话恢复路径。
-3. `CURRENT_STATE.md` —— 当前阶段与当前已证实结论。
-4. `NEXT_WORK.md` —— 当前导航与待办摘要。
-5. `GITHUB_WORKFLOW.md`（沿用既有的话可直接复制协议）—— Issue 生命周期、`STATUS:` 写在评论正文、DoD 模板。
-6. 在 `PROJECTS.md` 登记，并把 `Project Memory` 列标为 `ADOPTED`。
-
-**建议**：`DECISIONS.md`、`MEMORY_INDEX.md`、`CHANGELOG.md`。
-
-**不需要**：任何数据库、向量检索、记忆服务。文件-first 基线的效果没被测量之前，不引入这些依赖。
+1. 独立 repository；
+2. 在 `agent-lab/PROJECTS.md` 登记；
+3. 建立 Project Memory 最小集合，或明确现有等价文件并在 `PROJECTS.md` 标注；
+4. 建立 `GITHUB_WORKFLOW.md` 或现有等价协作协议；
+5. 在首次任务完成后回写 `CURRENT_STATE.md` / `NEXT_WORK.md`。
 
 ---
 
-## 9. 新会话恢复路径
+## 9. 恢复顺序
+
+新会话 / 新 Agent 冷启动：
 
 ```text
 agent-lab/README.md
@@ -245,14 +232,15 @@ agent-lab/README.md
 
 ## 10. 已知 Unknown
 
-| ID | 内容 | 状态 |
-|---|---|---|
-| U-A | **Control Tower（AI Venture Control Tower）究竟是否已建立** —— `agent-lab` #1 评论（2026-08-29 08:05 UTC）称已建立并给出 `https://github.com/users/watanuo1982/projects/1`（3 Issue / 2 视图 / 5 字段）；同一 Issue 评论（08:36 UTC）与 `PROJECT_CONTEXT.md` §3 称「尚未实际建立，BLOCKED」。两者矛盾，`[Unknown]`，不在此裁决。 | 待 Human / ChatGPT 裁决 |
-| U-B | `quantitative-trading` 是否已存在完整 Project Memory。**已核实 → RESOLVED**：经 P1-A Memory Alignment（qt Issue #1，commit `51696258698ff2c29f903f7986ee4e9f40f47004`）确认存在 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` / `DECISIONS.md` / `MEMORY_INDEX.md` 全集合，并保留成熟的 `research/research_memory/`（INDEX/SCHEMA/manifest/6 条目 + verdict）。原「待核实」系 agent-lab Issue #2（本架构）Non-goals 明确不迁移业务仓库所致，非现状。 | **RESOLVED**（2026-08-30，P1-C；证据：qt Issue #1 + commit `5169625`） |
-| U-C | `-ai-content` 是否已存在完整 Project Memory。**已核实 → RESOLVED**：经 P1-B Memory Alignment（-ai-content Issue #2，commit `fad8b740f8ee4041049c18999edccde642a56d30`）确认存在 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` / `DECISIONS.md` / `MEMORY_INDEX.md`（新建）+ `GITHUB_WORKFLOW.md` / `README.md` / `CHANGELOG.md` 全套，并声明 Evidence 五标记与 External 边界（A1–A6）。原「待核实」系 agent-lab Issue #2（本架构）Non-goals 明确不迁移业务仓库所致。 | **RESOLVED**（2026-08-30，P1-C；证据：-ai-content Issue #2 + commit `fad8b740`） |
-| U-D | 用户长期工作偏好（输出格式、决策方式等）目前只存在于 Buddy 本地 memory，不在 Git。**来源不在 Git 且未经 Human 确认，本期不升为 Global 事实。** | 待 Human 确认后由 ChatGPT 决定是否纳入 |
-| U-E | External Memory 的实际收益未验证 —— `external/` 目前只有种子条目，还没有被两个以上项目真实引用。 | 待使用后再评估 |
-| U-F | `-work-buddy-lab` 的状态不一致 —— `README.md` 记为「FROZEN」并仍列在仓库边界里，`PROJECTS.md` 记为「已从 GitHub 账户消失，已确认删除」。两者未对齐。本期**不改任何一方**（超出 Issue #2 范围，且删除声明需要 Human 确认）。 | 待 Human 确认后由 ChatGPT 决定 |
+[#10-已知-unknown](#10-已知-unknown)
+
+**Canonical 登记表已迁移至 `UNKNOWN_REGISTRY.md`**（`MEMORY_ROUTER.md` §1 Q5 的唯一落点）。
+
+本节不再重复维护条目正文，仅保留三条使用说明：
+
+1. 任何 Q1–Q4 判定不出归属的信息，登记到 `UNKNOWN_REGISTRY.md`，不要写回本节。
+2. 需要了解当前有哪些矛盾/待裁决事项时，直接读 `UNKNOWN_REGISTRY.md`，不要只读本节（本节不保证同步）。
+3. 历史上曾在本节登记过的 U-A ~ U-F 六条，已随本次迁移原样移入 `UNKNOWN_REGISTRY.md`，本节不再保留副本。
 
 ---
 
