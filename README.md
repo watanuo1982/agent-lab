@@ -30,6 +30,8 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 |---|---|
 | `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
 | `PROJECT_CONTEXT.md` | 四仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
+| `CURRENT_STATE.md` | Agent Hub 自身当前治理状态与恢复入口 |
+| `NEXT_WORK.md` | Agent Hub 自身下一步导航；正式任务仍以 Issue 为准 |
 | `MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
 | `MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
 | `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
@@ -45,18 +47,15 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 
 **一个真实项目 = 一个独立 repository；Agent Hub = 跨项目通知入口。**
 
-当前项目：
+当前注册项目：
 - `agent-lab`：跨项目协作基础设施
 - `-quantitative-trading`：量化研究 / 实盘策略
 - `-ai-content`：AI 内容生产
 - `-commercial-radar`：商业机会雷达
-- `-work-buddy-lab`：历史 Work Buddy 工具协作实验，FROZEN
 
-> ⚠️ **两处记载不一致（U-F）**：本清单列 **5** 个仓库（含 `-work-buddy-lab` FROZEN）；
-> `PROJECTS.md` 的注册表只列 **4** 个，并记 `-work-buddy-lab`「已从 GitHub 账户消失，已确认删除」。
-> 该冲突已登记于 `UNKNOWN_REGISTRY.md` **U-F**，**待 Human / ChatGPT 裁决，Buddy 不自行选边**。
-> 需要「现在有哪些在用项目」时请同时核对 `PROJECTS.md`；在 U-F 裁决前，两处均不作为最终结论。
-> （此矛盾由 2026-08-30 跨会话恢复实测第一轮暴露：新会话读到的第一份文件就是本文件，第一题即撞上矛盾。）
+`-work-buddy-lab` 是历史工具协作实验仓库，已删除，不属于当前项目注册表。历史资料如需引用，应以 Git 历史或其他明确证据为准。
+
+> 当前项目注册表以 `PROJECTS.md` 为 canonical source；发现与其他 Hub 文件不一致的项目事实时，先登记 `UNKNOWN_REGISTRY.md`，不得自行选边。
 
 未来新项目直接新建独立 repository，并在 `PROJECTS.md` 登记。
 
@@ -93,7 +92,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - 聊天里的口头指令只通过「Human 通知 Buddy 有新 Issue」进入执行，任务内容以 Issue 正文为准。
 - 本规则是各业务仓库 `GITHUB_WORKFLOW.md` 的上层总原则，不与之冲突。
 
-## 标准任务流程
+### 标准任务流程
 
 1. ChatGPT 在对应 Project Repo 创建 Issue，写清 Objective、Scope、Constraints、Deliverables 和 Definition of Done。
 2. Human 通知 Buddy 有新 Issue。
@@ -110,7 +109,12 @@ READY → IN_PROGRESS → DONE → VERIFIED → CLOSED
                      ↘ BLOCKED
 ```
 
-**状态元数据原则**：GitHub Issue Label / Project field（如可用）是当前状态的机器可查询表达；Issue 评论中的 `STATUS:` 是审计日志，不再作为唯一 current-state authority。GitHub 原生 Open/Closed 仍是 Issue 生命周期的最终状态。
+**状态元数据原则**：Issue 上恰好一个 `status:*` Label 是 current status 的机器可查询表达；Issue 评论中的 `STATUS:` 是审计日志，不再作为唯一 current-state authority。GitHub 原生 Open/Closed 仍是 Issue 生命周期的最终状态。
+
+当前允许的 status Label：
+`status:ready` / `status:in-progress` / `status:done` / `status:verified` / `status:blocked` / `status:hold`
+
+状态迁移时必须先移除旧的 `status:*` Label，再添加新的 `status:*` Label；任何 Issue 同时拥有 0 个或超过 1 个 `status:*` Label 都属于治理错误。
 
 当前兼容期允许继续写 `STATUS:` 评论，以保持既有历史流程可读；新工具或自动化不得依赖扫描历史评论来推断唯一当前状态。
 
@@ -123,7 +127,7 @@ Human 告知 Buddy 有新任务
         ↓
 Buddy 执行 + Commit/Push
         ↓
-Buddy 回写 Issue：状态元数据 + STATUS 审计日志
+Buddy 回写 Issue：状态 Label + STATUS 审计日志
         ↓
 ChatGPT Review
         ↓
