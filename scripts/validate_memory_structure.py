@@ -2,13 +2,14 @@
 """Validate agent-lab Global Memory structure and registered Project Memory.
 
 This is intentionally dependency-free so it can run in GitHub Actions and locally.
-It checks repository registration, required project-memory files, and Unknown registry fields.
+It checks repository registration, required project-memory files, and Unknown registry schema.
 """
 
 from __future__ import annotations
 
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -23,6 +24,14 @@ REQUIRED = [
     "NEXT_WORK.md",
     "GITHUB_WORKFLOW.md",
 ]
+
+UNKNOWN_STATUSES = {
+    "OPEN",
+    "REVIEW_DUE",
+    "RESOLVED",
+    "RETAINED_UNKNOWN",
+    "ARCHIVED",
+}
 
 
 def fail(errors: list[str]) -> int:
@@ -55,29 +64,74 @@ def remote_exists(repo: str, path: str) -> bool:
         return False
 
 
+def parse_date(value: str, field: str, item_id: str, errors: list[str]) -> date | None:
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        errors.append(f"Invalid {field} for {item_id}: {value}")
+        return None
+
+
 def validate_unknown_registry(errors: list[str]) -> None:
     if not UNKNOWN.exists():
         errors.append("UNKNOWN_REGISTRY.md is missing")
         return
+
     text = UNKNOWN.read_text(encoding="utf-8")
-    required_columns = ["ID", "Status", "Discovered", "Review by", "Owner", "Decision", "Evidence"]
+    required_columns = [
+        "ID",
+        "内容",
+        "状态",
+        "登记日期",
+        "review_by",
+        "复查触发条件",
+        "裁决方",
+        "decision",
+        "evidence",
+    ]
     header = next((line for line in text.splitlines() if line.startswith("| ID |")), "")
     for column in required_columns:
         if column not in header:
             errors.append(f"Unknown registry is missing required column: {column}")
+
+    rows = []
     for line in text.splitlines():
         if not line.startswith("| U-"):
             continue
         cells = [c.strip() for c in line.strip("|").split("|")]
-        if len(cells) != 7:
+        if len(cells) != 9:
             errors.append(f"Unknown registry row has wrong field count: {line}")
             continue
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", cells[2]):
-            errors.append(f"Invalid discovered date for {cells[0]}: {cells[2]}")
-        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", cells[3]):
-            errors.append(f"Invalid review_by date for {cells[0]}: {cells[3]}")
-        if cells[5] == "":
-            errors.append(f"Unknown {cells[0]} has empty decision")
+        rows.append(cells)
+
+        item_id, content, status, discovered, review_by, trigger, owner, decision, evidence = cells
+        if not re.fullmatch(r"U-[A-Z]+", item_id):
+            errors.append(f"Invalid Unknown ID: {item_id}")
+        if status not in UNKNOWN_STATUSES:
+            errors.append(f"Invalid status for {item_id}: {status}")
+        if not content or not trigger or not evidence:
+            errors.append(f"Unknown {item_id} is missing content, review trigger, or evidence")
+        discovered_date = parse_date(discovered, "discovered date", item_id, errors)
+
+        if status in {"OPEN", "REVIEW_DUE", "RETAINED_UNKNOWN"}:
+            if review_by == "":
+                errors.append(f"Active Unknown {item_id} must have review_by")
+            else:
+                review_date = parse_date(review_by, "review_by", item_id, errors)
+                if discovered_date and review_date and review_date < discovered_date:
+                    errors.append(f"review_by precedes discovered date for {item_id}")
+            if owner not in {"Human", "ChatGPT", "Human + ChatGPT"}:
+                errors.append(f"Invalid owner for active Unknown {item_id}: {owner}")
+            if decision != "PENDING":
+                errors.append(f"Active Unknown {item_id} must have decision=PENDING")
+        else:
+            if status == "RESOLVED" and decision in {"", "PENDING"}:
+                errors.append(f"Resolved Unknown {item_id} must record a decision")
+
+    # IDs are historical and must be unique; they are never reused.
+    ids = [row[0] for row in rows]
+    if len(ids) != len(set(ids)):
+        errors.append("Unknown registry contains duplicate IDs")
 
 
 def main() -> int:
@@ -95,7 +149,7 @@ def main() -> int:
     if errors:
         return fail(errors)
 
-    print("OK: agent-lab memory structure and registered Project Memory are valid")
+    print("OK: agent-lab memory structure and Unknown registry are valid")
     return 0
 
 
