@@ -13,11 +13,25 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - 通用协作协议
 - 跨项目记忆架构（见下节文件地图）
 
+## Agent 统一入口（强制）
+
+**任何读取本体系 Git/GitHub 的 Agent，都必须先进入 Git Memory Mode。**
+
+Human 不需要再提供启动清单。只要说：
+
+> **检查 Git 的记忆。**
+
+Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap；Human 后续指出具体项目后，Agent 自动执行 Project Bootstrap + Plan Continuity Check。
+
+**任何产生 durable change 的工作单元结束时，Agent 必须自动执行 Memory Sync Gate，并在需要时把记忆写回 Git。Human 不负责提醒“上传记忆”。**
+
+统一规则见 [`AGENT_GIT_MEMORY_CONTRACT.md`](AGENT_GIT_MEMORY_CONTRACT.md)。
+
 ## 文件地图
 
 记忆分为四层，完整定义见 `MEMORY_ARCHITECTURE.md`，路由规则见 `MEMORY_ROUTER.md`。
 
-每次新开 ChatGPT 会话，如涉及项目工作，先执行 `SESSION_BOOTSTRAP.md`；它是启动加载器，不是新的记忆层。
+每次进入 Git Memory Mode，先执行 `AGENT_GIT_MEMORY_CONTRACT.md`；Session 恢复细则见 `SESSION_BOOTSTRAP.md`。
 
 | 层 | 位置 | 管什么 |
 |---|---|---|
@@ -30,6 +44,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 
 | 文件 | 职责 |
 |---|---|
+| `AGENT_GIT_MEMORY_CONTRACT.md` | **所有 Agent 的统一 Git Memory 入口、自动启动与自动写回合同** |
 | `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
 | `PROJECT_CONTEXT.md` | 四仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
 | `CURRENT_STATE.md` | Agent Hub 自身当前治理状态与恢复入口 |
@@ -38,7 +53,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 | `MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
 | `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
 | `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
-| `SESSION_BOOTSTRAP.md` | 新 ChatGPT Session 的强制 Git Memory 加载与一致性检查协议 |
+| `SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
@@ -59,8 +74,6 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 `-work-buddy-lab` 是历史工具协作实验仓库，已删除，不属于当前项目注册表。历史资料如需引用，应以 Git 历史或其他明确证据为准。
 
 > 当前项目注册表以 `PROJECTS.md` 为 canonical source；发现与其他 Hub 文件不一致的项目事实时，先登记 `UNKNOWN_REGISTRY.md`，不得自行选边。
-
-未来新项目直接新建独立 repository，并在 `PROJECTS.md` 登记。
 
 ## 协作方式
 
@@ -141,4 +154,4 @@ VERIFIED → Close
 
 除非出现明确收益，否则不增加 webhook、自动触发器或其他协作基础设施。
 
-**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果。**
+**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果；`AGENT_GIT_MEMORY_CONTRACT.md` 管所有 Agent 的统一读写入口与记忆同步责任。**
