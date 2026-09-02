@@ -5,6 +5,7 @@
 | quantitative-trading | `watanuo1982/-quantitative-trading` | 量化研究 / 实盘策略 | ACTIVE | **ADOPTED**（P1-A, commit `51696258698ff2c29f903f7986ee4e9f40f47004`） | 独立项目，所有策略、数据、实验、报告留在本仓库 |
 | ai-content | `watanuo1982/-ai-content` | AI 内容生产 | ACTIVE | **ADOPTED**（P1-B, commit `fad8b740f8ee4041049c18999edccde642a56d30`） | 独立项目，内容、任务、Review、平台实验留在本仓库 |
 | commercial-radar | `watanuo1982/-commercial-radar` | 商业机会雷达 / ToC 选品 | ACTIVE | **ADOPTED**（Issue #9, `b29eebf`） | 独立项目，任务走本仓库 GitHub Issues；选品流水线、评分模型、实验记录留在本仓库。**已验证参考实现** |
+| agent-runtime | `watanuo1982/agent-runtime` | Cloud Runtime / Agent 执行基础设施 | ACTIVE | **PENDING**（新项目，待初始化） | 独立 Runtime 项目；负责 Cloudflare runtime 实现。首个运行目标为 `core-agent`。**不承载 Global Memory / Agent Hub 治理** |
 | agent-hub | `watanuo1982/agent-lab` | 跨项目协作基础设施 | ACTIVE | **不适用**（本层即 Global Memory v0.1，Issue #2） | 项目注册、跨项目通知、协作协议、记忆架构 |
 
 > `Project Memory` 列记录该项目是否已建立 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md` / `NEXT_WORK.md` 等最小记忆集合。
@@ -47,3 +48,16 @@ Agent Hub 不复制上述内容，只保存跨项目的任务指针、项目地�
 ## 仓库边界原则
 
 **一个真实项目 = 一个独立 repository；Agent Hub = 唯一跨项目通知入口。**
+
+## Cloud Runtime 项目边界
+
+`agent-runtime` 是 Agent System 的独立 Runtime implementation project。
+
+- `agent-lab`：Governance / Agent Hub / Global Memory
+- `agent-runtime`：Cloud Runtime implementation / deployment
+- Cloudflare：运行时平台
+- `core-agent`：第一个 Runtime Agent
+- Buddy：在明确 Issue 合同下执行实现
+- ChatGPT：负责 Runtime 架构、研究、方案、任务合同与 Review
+
+不得把 Runtime implementation code、部署配置或运行时项目 Memory 搬入 `agent-lab`，除非未来发生经过 Evidence → Evaluation → Change Proposal → Approval 的架构变更。
