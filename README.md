@@ -12,6 +12,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - 跨项目状态指针
 - 通用协作协议
 - 跨项目记忆架构（见下节文件地图）
+- **Agent System 的全局运行时架构（见 `CLOUD_RUNTIME_ARCHITECTURE.md`）**
 
 ## Agent 统一入口（强制）
 
@@ -35,7 +36,7 @@ Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap�
 
 | 层 | 位置 | 管什么 |
 |---|---|---|
-| **Global** | 本仓库 | 项目地图、跨项目原则、协作协议、Memory 协议 |
+| **Global** | 本仓库 | 项目地图、跨项目原则、协作协议、Memory 协议、Agent Runtime 架构 |
 | **Project** | 各业务仓库 | 该项目自己的目标、状态、决策、研究、实验、下一步 |
 | **External** | `external/` | 外部知识/工具/来源的**指针与判据**，不是事实源 |
 | **Session** | 不落盘 | 本次对话的中间过程，默认不进入长期记忆 |
@@ -54,6 +55,7 @@ Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap�
 | `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
 | `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
 | `SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
+| `CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
@@ -154,4 +156,4 @@ VERIFIED → Close
 
 除非出现明确收益，否则不增加 webhook、自动触发器或其他协作基础设施。
 
-**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果；`AGENT_GIT_MEMORY_CONTRACT.md` 管所有 Agent 的统一读写入口与记忆同步责任。**
+**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果；`AGENT_GIT_MEMORY_CONTRACT.md` 管所有 Agent 的统一读写入口与记忆同步责任；`CLOUD_RUNTIME_ARCHITECTURE.md` 管 Cloudflare Agent Runtime 的全局架构。**
