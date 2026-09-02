@@ -1,0 +1,71 @@
+version: "0.2"
+name: git-memory-runtime
+canonical_repo: watanuo1982/agent-lab
+scope: global
+bootstrap:
+  entry: AGENTS.md
+  contract: AGENT_GIT_MEMORY_CONTRACT.md
+  global:
+    - README.md
+    - PROJECTS.md
+    - CURRENT_STATE.md
+    - NEXT_WORK.md
+    - MEMORY_ARCHITECTURE.md
+    - MEMORY_ROUTER.md
+    - MEMORY_PROTOCOL.md
+    - UNKNOWN_REGISTRY.md
+    - SESSION_BOOTSTRAP.md
+    - PLAN_PROTOCOL.md
+  project_after_identification:
+    - README.md
+    - PROJECT_CONTEXT.md
+    - CURRENT_STATE.md
+    - NEXT_WORK.md
+    - MEMORY_INDEX.md
+    - DECISIONS.md
+    - GITHUB_WORKFLOW.md
+routing:
+  canonical_rule: MEMORY_ROUTER.md
+  durable_test: "future wrong judgment OR repeated work OR violated direction"
+  scopes:
+    - task
+    - project
+    - global
+lifecycle:
+  durable: [Captured, Classified, Candidate, Validated, Active, Superseded, Archived]
+  unknown: [Unknown, Investigating, Resolved, Promoted]
+write_policy:
+  L0: no_write
+  L1: auto_write
+  L2: proposal
+  L3: human_confirmation
+operations: [CREATE, UPDATE, SUPERSEDE, RESOLVE]
+core_delete: false
+session_trigger_monitor:
+  every_turn: lightweight_scan
+  strong_triggers:
+    - explicit_decision_or_rule
+    - reversal_or_supersession
+    - project_state_change
+    - stable_definition
+    - new_unknown_or_conflict
+    - durable_workflow_rule
+    - work_unit_completion
+  full_checkpoints:
+    - work_unit_completion
+    - user_conclusion_confirmation
+    - before_buddy_handoff
+    - project_or_topic_switch
+    - session_interruption_or_end
+health:
+  computed: true
+  persisted_health_file: false
+  minimum_checks:
+    - required_files
+    - manifest_and_index_references
+    - scope_validity
+    - no_silent_core_delete_or_overwrite
+    - status_consistency
+    - unknown_registry_structure
+    - decision_provenance
+    - duplicate_active_canonical_facts
