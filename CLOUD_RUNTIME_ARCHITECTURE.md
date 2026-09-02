@@ -32,7 +32,7 @@ Hard rule: **GitHub is Canonical; Cloudflare is Runtime; Buddy is Execution; Cha
 
 The Cloud Runtime implementation must live in an independent repository, currently designated:
 
-`watanuo1982/agent-runtime`
+`watanuo1982/-agent-runtime`
 
 The first runtime target inside that project is:
 
@@ -255,6 +255,6 @@ Do not introduce, in v0.1:
 
 ## 14. Decision
 
-**ADOPTED:** Cloudflare is part of the global Agent System architecture as the Cloud Runtime Layer, while its implementation is isolated in the independent `agent-runtime` project.
+**ADOPTED:** Cloudflare is part of the global Agent System architecture as the Cloud Runtime Layer, while its implementation is isolated in the independent `-agent-runtime` project.
 
 The first implementation target is a Free-plan-compatible `core-agent`; paid compute is an escalation path, not a prerequisite.
