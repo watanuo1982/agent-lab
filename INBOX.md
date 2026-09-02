@@ -6,9 +6,12 @@
 
 ## 当前任务
 
-> 当前没有新的 `ASSIGNED` 任务。
->
-> Quantitative Trading 当前处于 **ChatGPT Review**：P2-B / P2-C 已完成，等待研究结论统一审查；项目仓库 `NEXT_WORK.md` 决定下一项研究。
+| task | status | project | repository | project_entry | next_work | assigned_at | assigned_by |
+|---|---|---|---|---|---|---|---|
+| `#15 — External Candidate Validation` | `ASSIGNED` | quantitative-trading | `watanuo1982/-quantitative-trading` | `PROJECT_CONTEXT.md` | `NEXT_WORK.md` → Issue #15 | 2026-09-02 | ChatGPT |
+
+> 项目当前 Active Plan：`plans/PLAN_V71_CANONICAL_RECONCILIATION_v1.md`（v1）。
+> 具体任务合同只在 quantitative-trading Issue #15 中。
 
 ## 新任务格式
 
@@ -33,7 +36,7 @@ Buddy 收到通知后：
 1. 读取本文件；
 2. 找到 `status: ASSIGNED` 的任务；
 3. 根据 `project` / `repository` 跳转到对应 Project Repo；
-4. 读取该项目的 `PROJECT_CONTEXT.md`、`CURRENT_STATE.md`、`NEXT_WORK.md`，再按任务读取具体规范；
+4. 读取该项目的 `PROJECT_CONTEXT.md`、`CURRENT_STATE.md`、`NEXT_WORK.md`、Active Plan，再按 Issue 读取具体规范；
 5. 只在目标 Project Repo 执行任务并提交 Git；
 6. 完成后回到本 Hub，将任务标记为 `DONE` 或 `BLOCKED`，记录 commit SHA 和一句结果摘要；
 7. `DONE` 任务随后归档到 `archive/`，不长期堆积在 INBOX。
@@ -52,3 +55,4 @@ Buddy 收到通知后：
 - `agent-lab` 只负责跨项目通知、项目索引和协作协议。
 - 项目详细工作不得重新集中写入 `INBOX.md`。
 - 不同项目之间不得共享 `NEXT_WORK.md` 或混写项目任务。
+- `INBOX.md` 的任务状态不得取代 Project Repo 的 GitHub Issue status；Issue 才是执行合同。
