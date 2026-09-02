@@ -1,182 +1,158 @@
-# Session Bootstrap Protocol v0.2
+# Session Bootstrap Protocol v0.3
 
-> 用途：每次开启新的 ChatGPT 会话时，强制从 Git/GitHub 恢复长期项目上下文。
+> 用途：每次开启新的 ChatGPT 会话时，自动从 Git/GitHub 恢复长期项目上下文，并保证已确认 Plan 不因换 Session 而漂移。
 >
-> **Git/GitHub 是长期 canonical source；Session memory 不能覆盖 Git。**
-> 本协议不是新的记忆层，也不是任务系统；它是进入 Session 前的强制加载、一致性与 Plan continuity 检查程序。
+> **统一 Agent 入口现在是 `AGENT_GIT_MEMORY_CONTRACT.md`。** 本文件负责 Session 恢复细则，不再要求 Human 每次粘贴启动提示词。
 
 ## 1. 强制触发
 
-以下任一情况发生前，必须先执行 Git Memory Bootstrap：
+只要发生以下任一情况，自动进入 Git Memory Mode，并遵守 `AGENT_GIT_MEMORY_CONTRACT.md`：
 
-- 回答任何依赖历史项目上下文的问题
-- 继续上一次项目工作
-- 判断项目当前状态 / 当前任务 / 下一步
-- 创建、修改、关闭或通知执行 GitHub Issue
-- 修改项目或 `agent-lab` 文件
-- 通知 Buddy 执行任务
-- Review Buddy 的 commit / research / content / experiment
+- Human 说“检查 Git 的记忆”；
+- Human 要求恢复/继续项目；
+- Human 开始讨论一个已注册项目；
+- 需要判断项目当前状态 / 当前任务 / 下一步；
+- 创建、修改、关闭或通知执行 GitHub Issue；
+- 修改项目或 `agent-lab` 文件；
+- 通知 Buddy 执行任务；
+- Review Buddy 的 commit / research / content / experiment。
 
-普通项目无关问答不要求执行本协议。
+**Human 不需要提供启动文件清单。**
 
-## 2. Bootstrap 原则
+## 2. 极简启动方式
 
-1. **先识别项目，再读取项目。** 不确定时读取 `agent-lab/PROJECTS.md`。
-2. **Session memory 只能作为线索，不能作为事实源。**
-3. **Git 文件负责知识与状态；GitHub Issue 负责具体任务合同。**
-4. **一个事实只有一个 canonical owner。** 如果发现多个来源都声称自己是 current/canonical，先停下并报告冲突。
-5. **Unknown 不猜。** 冲突或无法确认的内容按 `UNKNOWN_REGISTRY.md` 处理。
-6. **不要因为恢复上下文而改写仓库。** Bootstrap 默认只读；发现问题先报告，修复必须另行授权。
+Human 可以只说：
 
-## 3. Global Memory Bootstrap
+> **检查 Git 的记忆。**
 
-先读取 `agent-lab`：
+Agent 自动执行：
 
-1. `README.md`
-2. `PROJECTS.md`
-3. `CURRENT_STATE.md`
-4. `NEXT_WORK.md`
-5. `MEMORY_ARCHITECTURE.md`
-6. `MEMORY_ROUTER.md`
-7. `UNKNOWN_REGISTRY.md`
-8. `SESSION_BOOTSTRAP.md`
-9. `PLAN_PROTOCOL.md`
+```text
+读取 AGENT_GIT_MEMORY_CONTRACT.md
+        ↓
+Global Bootstrap
+        ↓
+识别当前项目（如尚未明确则等待）
+        ↓
+Project Bootstrap
+        ↓
+Plan Continuity Check
+        ↓
+Task Resolution
+```
 
-必要时再读取 `PROJECT_CONTEXT.md`、`MEMORY_PROTOCOL.md`、`INBOX.md`、相关 `external/`。
+如果 Human 后续说“进入量化项目 / 回到 P03 / 继续商业雷达”等，Agent 不需要重新获得读取授权，直接进入对应 Project Bootstrap。
 
-## 4. Project Memory Bootstrap
+## 3. Global Bootstrap
 
-确定目标项目后，按以下顺序读取：
+由 `AGENT_GIT_MEMORY_CONTRACT.md` 规定统一入口与文件顺序。核心 Global 文件为：
+
+1. `AGENT_GIT_MEMORY_CONTRACT.md`
+2. `README.md`
+3. `PROJECTS.md`
+4. `CURRENT_STATE.md`
+5. `NEXT_WORK.md`
+6. `MEMORY_ARCHITECTURE.md`
+7. `MEMORY_ROUTER.md`
+8. `MEMORY_PROTOCOL.md`
+9. `UNKNOWN_REGISTRY.md`
+10. `SESSION_BOOTSTRAP.md`
+11. `PLAN_PROTOCOL.md`
+
+按需读取 `PROJECT_CONTEXT.md`、`INBOX.md`、`external/` 与相关历史。
+
+## 4. Project Bootstrap
+
+目标项目明确后，自动读取：
 
 1. `README.md`
 2. `PROJECT_CONTEXT.md`（如存在）
 3. `CURRENT_STATE.md`
 4. `NEXT_WORK.md`
-5. **Active Plan**：按 `PLAN_PROTOCOL.md` 查找项目 `plans/` 或项目声明的唯一 Active Plan
+5. 唯一 Active Plan（如存在）
 6. `MEMORY_INDEX.md`（如存在）
 7. `DECISIONS.md`（如存在）
 8. `GITHUB_WORKFLOW.md`（如存在）
-9. 与当前阶段直接相关的 research / evidence / experiments / archive
+9. 当前阶段直接相关的 Issue / research / evidence / experiment
 
-不要为了“完整恢复”读取整个仓库。
+不要扫描整个仓库。
 
-## 5. Plan Continuity — 新会话不得重新发明已确认计划
+## 5. Plan Continuity
 
-### 5.1 Plan 是受保护资产
-
-如果项目存在 `ACTIVE` / `APPROVED` Plan：
-
-> **默认动作是继续原 Plan，而不是重新制定 Plan。**
-
-新会话不能因为：
-- 时间间隔较长；
-- Session memory 不完整；
-- 重新推理后发现“看起来更好的方案”；
-- 当前 Issue 已完成；
-
-就静默替换原 Plan。
-
-### 5.2 必须恢复
+如果存在 `ACTIVE` / `APPROVED` Plan，必须恢复：
 
 ```text
-ACTIVE PLAN:
-PLAN ID:
-PLAN VERSION:
-PLAN STATUS:
-PLAN OBJECTIVE:
-CURRENT PHASE:
-CURRENT ISSUE:
-COMPLETED PLAN STEPS:
-CURRENT PLAN STEP:
-NEXT PLAN STEP:
-CHANGE PROPOSALS:
+ACTIVE PLAN
+PLAN ID
+PLAN VERSION
+PLAN STATUS
+PLAN OBJECTIVE
+CURRENT PHASE
+CURRENT ISSUE
+ISSUE STATUS
+COMPLETED PLAN STEPS
+CURRENT PLAN STEP
+NEXT PLAN STEP
+CHANGE PROPOSALS
+LATEST RELEVANT COMMIT
+KEY DECISIONS
+OPEN UNKNOWNS
+BUDDY STATUS
+CONFLICTS
 ```
 
-### 5.3 Change control
+默认动作：**继续原 Plan。**
 
-Evidence 可以挑战 Plan，但不能自动修改 Plan：
+不得因为换 Session、时间间隔、Session memory 缺失或重新推理而静默重新规划。
 
-`Evidence → ChatGPT evaluates → Change Proposal → Human/ChatGPT approval → new Plan version`
+Plan 变更必须遵守：
 
-没有明确 Change Proposal + approval，不得生成新 Plan 版本。
+`Evidence → Evaluation → Change Proposal → Approval → New Plan Version`
 
-## 6. Current Task Resolution
+## 6. Task Resolution
 
-### 6.1 任务唯一来源
+GitHub Issue 是具体执行任务的唯一合同。
 
-> **GitHub Issue 是具体执行任务的唯一合同。**
+- `CURRENT_STATE.md`：状态
+- `NEXT_WORK.md`：导航
+- `BUDDY_TASK_CURRENT.md`：指针
+- `INBOX.md`：通知指针
+- Session memory / 旧聊天：线索
 
-以下文件只能导航/描述状态，不能独立产生 Buddy 任务：
+它们都不能独立产生任务。
 
-- `CURRENT_STATE.md`
-- `NEXT_WORK.md`
-- `BUDDY_TASK_CURRENT.md`
-- `TASK*.md`
-- `INBOX.md`
-- 旧聊天记录
-- Session memory
+若发现 Plan / State / Issue / Next Work / Task Pointer 冲突：
 
-如果这些文件描述了“当前任务”，必须找到对应 GitHub Issue。
+> **MEMORY BOOTSTRAP BLOCKED**
 
-### 6.2 必须确认关系
+不猜、不执行、不修改。
 
-```text
-Active Plan
-    ↓
-Current Phase / Plan Step
-    ↓
-GitHub Issue
-    ↓
-Issue status label
-    ↓
-Buddy commit / Issue report
-    ↓
-ChatGPT Review
-    ↓
-Plan Progress
-```
+## 7. Memory Sync 是自动动作，不再依赖 Human 提醒
 
-### 6.3 阻断条件
+本文件与 `AGENT_GIT_MEMORY_CONTRACT.md` 一起规定：
 
-出现以下任一情况，不得继续：
+> **任何 Agent 在产生 durable change 后，都必须自动运行 Memory Sync Gate。**
 
-- 当前任务找不到对应 Issue
-- Active Plan 与 `CURRENT_STATE.md` 指向不同阶段且无法解释
-- Active Plan 与 current Issue 不一致且无法解释
-- `NEXT_WORK.md` 指向另一个“当前任务”
-- 存在两个以上文件声称自己是唯一 current task
-- Issue 状态 label 与项目状态明显矛盾且无法解释
-- Buddy 正在执行，但无法确认对应 Issue
-- Session memory 与 Git canonical facts 冲突且尚未裁决
+触发包括但不限于：
 
-输出：`MEMORY BOOTSTRAP BLOCKED`，列出冲突，不自行选边。
+- 新长期事实；
+- 新/改变的决策；
+- 当前状态变化；
+- Plan step 完成；
+- Issue 创建/开始/完成/阻塞/验证/关闭；
+- Buddy commit / push；
+- ChatGPT Review；
+- 新研究/实验结论；
+- 新 Unknown / 冲突；
+- 协作规则变化。
 
-## 7. Authority Check
+Agent 必须自行判断并写回 canonical owner；**Human 不需要提醒“上传记忆”。**
 
-| 项目 | Authority |
-|---|---|
-| Project | `PROJECTS.md` + 目标 repo |
-| State | `CURRENT_STATE.md` |
-| Plan | Project Active Plan |
-| Navigation | `NEXT_WORK.md` |
-| Task | GitHub Issue |
-| Task status | `status:*` label + Open/Closed |
-| Evidence | research / evidence / experiment |
-| Decisions | `DECISIONS.md` |
-| Unknowns | `UNKNOWN_REGISTRY.md` |
-| History | Git commits / Issue history |
+如果没有 durable change，则 `Memory Sync: NOT NEEDED`，避免制造垃圾提交。
 
-## 8. Buddy 运行保护
+如果 Agent 没有写权限，则必须输出 `MEMORY_SYNC_REQUIRED`，不得声称已同步。
 
-如果 Buddy 正在执行：
-
-1. 确认对应 Issue。
-2. 不得修改执行文件、输入数据、输出目录或任务合同。
-3. 不得为了“修复记忆”改变任务范围。
-4. 可以只读检查治理文档。
-5. Buddy 完成后再做状态对齐。
-
-## 9. Session Recovery Card
+## 8. Session Recovery Card
 
 Bootstrap 完成后，在当前 Session 内形成临时 Recovery Card：
 
@@ -198,9 +174,9 @@ NEXT PLAN STEP:
 CONFLICTS:
 ```
 
-默认不写回 Git。
+Recovery Card 默认不写回 Git；其 durable 部分通过 Memory Sync Gate 写入 canonical owner。
 
-## 10. Startup Report
+## 9. Startup Report
 
 向 Human 简要报告：
 
@@ -217,64 +193,55 @@ Buddy: ...
 Latest Commit: ...
 Conflicts: none / ...
 Next: ...
+Memory Sync: DONE / NOT NEEDED / BLOCKED
 ```
 
-如果 BLOCKED，只报告冲突和需要裁决的地方，不继续执行。
+若 BLOCKED，只报告冲突，不继续执行。
 
-## 11. Cold-start acceptance test
+## 10. Cold-start acceptance
 
-一个新 ChatGPT Session 在不依赖旧聊天记录的情况下，至少必须恢复：
+新 Session 在不依赖旧聊天的情况下，至少恢复：
 
-```text
-当前项目
-Active Plan + version
-Plan objective
-Current phase
-Current Issue + status
-已完成 Plan Steps
-当前 Plan Step
-下一 Plan Step
-关键证据
-Open Unknowns
-是否存在冲突
-```
+- 当前项目
+- Active Plan + version
+- Plan objective
+- Current phase
+- Current Issue + status
+- 已完成 Plan steps
+- 当前 Plan step
+- 下一 Plan step
+- 关键证据
+- Open Unknowns
+- 是否存在冲突
 
-并且必须得到：
+并得到：
 
 > **继续当前 Plan / 当前 Issue，而不是重新制定计划。**
 
-## 12. 可直接粘贴到新会话的启动提示词
+## 11. 旧启动提示词的兼容说明
 
-> **执行 Git Memory Bootstrap + Plan Continuity Check。**
->
-> Git/GitHub 是我的长期 canonical source；Session memory 不得覆盖 Git。先识别当前项目；涉及项目工作时，先读取 `agent-lab/README.md`、`PROJECTS.md`、`CURRENT_STATE.md`、`NEXT_WORK.md`、`MEMORY_ARCHITECTURE.md`、`MEMORY_ROUTER.md`、`UNKNOWN_REGISTRY.md`、`SESSION_BOOTSTRAP.md`、`PLAN_PROTOCOL.md`，再读取目标项目的 `README.md`、`PROJECT_CONTEXT.md`、`CURRENT_STATE.md`、`NEXT_WORK.md`、唯一 Active Plan、`MEMORY_INDEX.md`（如有）、`DECISIONS.md`（如有）、`GITHUB_WORKFLOW.md`（如有）及当前阶段相关证据。
->
-> 必须恢复：当前项目、Current State、Active Plan、Plan version、Plan objective、Current Phase、Current Issue、Issue status、已完成 Plan steps、当前 Plan step、下一 Plan step、最新相关 commit、关键决策、Open Unknowns、Buddy 状态。
->
-> **如果存在 ACTIVE/APPROVED Plan，默认继续原 Plan。禁止因为换会话、时间间隔、重新推理或出现“更好的方案”而静默重新规划。任何改变必须先形成 Change Proposal，并获得 Human/ChatGPT 明确批准后建立新 Plan 版本。**
->
-> GitHub Issue 是唯一执行任务合同；`CURRENT_STATE.md` / `NEXT_WORK.md` / `BUDDY_TASK_CURRENT.md` / 旧聊天 / Session memory 都不能独立定义任务。若发现 Plan、Current State、Issue、Next Work 或任务指针冲突，立即输出 `MEMORY BOOTSTRAP BLOCKED`，列出冲突，不猜、不执行、不修改。
->
-> Bootstrap 默认只读。先给我 Startup Report，再继续我的请求。
+历史上使用的长启动提示词仍然有效，但不再是必要条件。
 
-## 13. 与 Memory Architecture 的关系
+**从 v0.3 开始，Human 只需“检查 Git 的记忆”；读取协议、项目识别、Plan continuity 和 Memory Sync 都由统一 Agent Contract 自动触发。**
+
+## 12. 与其他协议的关系
 
 ```text
-Memory Architecture
-       ↓
-Canonical Plan
-       ↓
-Consistency Validator
-       ↓
-Session Bootstrap
-       ↓
-Plan Continuity Check
-       ↓
-Issue Execution
-       ↓
+AGENT_GIT_MEMORY_CONTRACT
+        ↓
+MEMORY_ARCHITECTURE
+        ↓
+MEMORY_ROUTER
+        ↓
+SESSION_BOOTSTRAP
+        ↓
+PLAN_PROTOCOL
+        ↓
+Project Memory + GitHub Issue
+        ↓
 Review
-       ↓
-Plan Progress
+        ↓
+Memory Sync
 ```
 
-Memory Architecture 管理“信息属于哪里”；Plan Protocol 管理“确认后的路线如何持续”；Session Bootstrap 确保每次新会话真正恢复并遵守它们。
+`AGENT_GIT_MEMORY_CONTRACT.md` 是所有 Agent 的统一入口；本文件是 ChatGPT Session 恢复的专门协议。
