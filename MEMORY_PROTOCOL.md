@@ -121,7 +121,7 @@ Run Memory Sync Gate after any of the following:
 - ChatGPT Review
 - research or experiment reaches a reusable conclusion
 - known fact is superseded by evidence
-- new Unknown or contradiction appears
+- new Unknown or contradiction
 - collaboration protocol changes
 
 ### 6.2 No-op is valid
@@ -236,3 +236,98 @@ If these criteria fail at scale, then evaluate a retrieval layer such as QMD/vec
 - Agent Memory Techniques: useful comparative map of memory patterns and evaluation approaches.
 
 The objective is not to reproduce any framework. The objective is to adopt the smallest useful ideas while preserving the existing GitHub-native workflow.
+
+## 13. GMR v0.2 — Session Trigger Monitor and Promotion Gate
+
+> **Status: FROZEN / IMPLEMENTED 2026-09-02.** This section is the operational overlay for the runtime behavior agreed for GMR v0.2. It does not replace the four-layer ownership rules in `MEMORY_ARCHITECTURE.md` or the routing procedure in `MEMORY_ROUTER.md`.
+
+### 13.1 Per-turn Trigger Scan
+
+Every conversation turn receives a lightweight semantic scan. The scan is an evaluation step, not a Git write.
+
+```text
+Conversation turn
+  ↓
+Lightweight Trigger Scan
+  ├─ no trigger → continue
+  └─ trigger → Memory Evaluation
+```
+
+Strong triggers include:
+
+- explicit durable decision/rule (`决定 / 以后 / 采用 / 不再 / 确定 / 作为标准`);
+- reversal or supersession (`推翻 / 改成 / 刚才不对`);
+- project state change (completed / failed / published / verified / restarted);
+- stable definition or invariant established;
+- new unresolved Unknown or conflict;
+- durable workflow rule/preference;
+- work-unit completion.
+
+### 13.2 Full-check checkpoints
+
+A full Memory Sync Gate is mandatory at these natural boundaries:
+
+- work-unit completion;
+- user confirmation of a conclusion;
+- before handing work to Buddy;
+- project/topic switch;
+- session interruption or end.
+
+### 13.3 Trigger is not Writeback
+
+A trigger only starts Memory Evaluation. The evaluation must then apply the Durable Impact Test and `MEMORY_ROUTER.md` before any write.
+
+```text
+Trigger
+  ↓
+Durable Impact Test
+  ↓
+Classify: Fact / Decision / State / Knowledge / Unknown
+  ↓
+Route: task / project / global
+  ↓
+Promotion policy: L0 / L1 / L2 / L3
+  ↓
+CREATE / UPDATE / SUPERSEDE / RESOLVE
+```
+
+### 13.4 Durable Impact Test
+
+Durable memory is justified only when failure to retain it could cause a future agent to make a wrong judgment, repeat completed work, or violate an established direction.
+
+Observation ≠ Knowledge. Idea ≠ Decision. Candidate ≠ Durable Memory.
+
+An assistant proposal does not become a durable decision merely because the assistant proposed it. User acceptance and/or evidence is required according to the risk level.
+
+### 13.5 Promotion policy
+
+| Level | Policy | Typical examples |
+|---|---|---|
+| L0 | No write | transient discussion, rejected ideas, one-off context |
+| L1 | Auto write | low-risk state, next work, explicit experiment status/results |
+| L2 | Proposal | reusable Knowledge, Decision, Supersede, Unknown resolution |
+| L3 | Human confirmation | Global Memory, cross-project rules, major architecture/direction, conflict arbitration |
+
+### 13.6 Scope and history guardrails
+
+Every writeback has an explicit scope: `task | project | global`.
+
+Project Memory never automatically promotes to Global Memory. Global Memory never silently mutates Project Memory.
+
+Core memory has no DELETE transition. A changed fact is represented through `SUPERSEDE` with provenance and history retained. Repeated detection of the same fact must be idempotent and must not create duplicate canonical entries.
+
+### 13.7 Runtime responsibility
+
+**ChatGPT is the Memory Owner** when Git write access is available: it performs trigger evaluation, promotion judgment, routing, direct Git writeback, and post-write verification. Buddy remains execution-only and is not required as an intermediary for memory synchronization.
+
+If ChatGPT lacks write access, it must emit `MEMORY_SYNC_REQUIRED` and must not claim that synchronization succeeded.
+
+### 13.8 End-of-turn invariant
+
+Before returning a final response after a durable change, ChatGPT must have completed the Memory Sync Gate. The response may report:
+
+- `Memory Sync: DONE`
+- `Memory Sync: NOT NEEDED`
+- `Memory Sync: BLOCKED`
+
+The goal is zero Human reminders for routine durable-memory synchronization.
