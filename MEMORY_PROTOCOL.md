@@ -1,17 +1,14 @@
 # Git-Native Project Memory Protocol
 
 > P0 experiment, 2026-08-29. This protocol adapts ideas from current open-source agent-memory systems to the existing ChatGPT ↔ GitHub ↔ Work Buddy workflow.
-
+>
 > ## 归属说明（2026-08-30，agent-lab Issue #2）
 >
-> 本文件是 **P0 记忆协议草案**，**仍然有效**，保留其独有内容：
-> §4 什么值得记 · §5 记录语义 · §6 写入时机 · §10 P0 成功标准 · §11 rollout · §12 设计参考。
+> 本文件是 **P0 记忆协议草案**，**仍然有效**，保留其独有内容：§4 什么值得记、§5 记录语义、§6 写入时机、§10 P0 成功标准、§11 rollout、§12 设计参考。
 >
-> **四层记忆模型（Global / Project / External / Session）与路由规则的 canonical 归属是**
-> **`MEMORY_ARCHITECTURE.md` 与 `MEMORY_ROUTER.md`**；本文件不再重复定义。
+> **四层记忆模型（Global / Project / External / Session）与路由规则的 canonical 归属是** `MEMORY_ARCHITECTURE.md` 与 `MEMORY_ROUTER.md`；本文件不再重复定义。
 >
-> ⚠️ **SUPERSEDED**：本文件 §2 只定义了 Global / Project 两层。
-> **External 与 Session 两层以 `MEMORY_ARCHITECTURE.md` §2.3 / §2.4 为准。**
+> ⚠️ **SUPERSEDED**：本文件 §2 只定义了 Global / Project 两层。External 与 Session 两层以 `MEMORY_ARCHITECTURE.md` §2.3 / §2.4 为准。
 > §9 的仓库隔离原则仍有效，并由 `MEMORY_ARCHITECTURE.md` §4 的 canonical 表细化。
 
 ## 1. Purpose
@@ -19,6 +16,8 @@
 GitHub is the durable source of truth for project state. Memory is not a copy of chat history. It is a curated, versioned representation of facts that must survive across conversations and agents.
 
 The protocol is intentionally file-first and Git-native. No vector database, graph database, hosted memory service, or new runtime is required for P0.
+
+**统一 Agent 入口与自动写回义务由 `AGENT_GIT_MEMORY_CONTRACT.md` 定义。** 本文件负责“什么值得记、如何记录、何时写回”等语义细则。
 
 ## 2. Scope model
 
@@ -61,8 +60,6 @@ HISTORY / EVIDENCE
   ↓ retrieved when needed
 ```
 
-This follows the useful part of Letta's file-backed memory approach: keep a small active context while retaining deeper versioned memory outside the active context. Letta's current MemFS documentation explicitly uses Git-backed Markdown memory with a small always-loaded system layer and deeper reference memory. See: https://github.com/letta-ai/letta-docs-md/blob/main/concepts/memfs/index.md
-
 ## 4. What deserves memory
 
 Save a fact when at least one is true:
@@ -92,49 +89,78 @@ When practical, durable facts should carry:
 
 For changing facts, do not silently overwrite history. Mark the previous fact as superseded and record the new fact and reason.
 
-This borrows the temporal-awareness principle from Graphiti: facts can change, so memory should preserve when a fact was valid rather than pretending the latest value was always true.
+## 6. Write policy — automatic, checkpoint-based
 
-## 6. Write policy
+Memory is **not** a Human-reminder task.
 
-Memory is updated at meaningful checkpoints, not after every message.
+The universal rule is defined by `AGENT_GIT_MEMORY_CONTRACT.md`:
 
-Recommended checkpoint:
+> **Every Agent must automatically run Memory Sync Gate after meaningful durable change.**
+
+The normal lifecycle is:
 
 ```text
-Task proposed
-→ execution
-→ commit/result
-→ ChatGPT review
-→ VERIFIED / BLOCKED
-→ update project memory
+Task / Research / Discussion
+→ durable change detected?
+→ route through MEMORY_ROUTER
+→ write canonical owner
+→ commit / Issue evidence
+→ verify
 ```
 
-The final verified result is the strongest candidate for `CURRENT_STATE.md` or `DECISIONS.md`.
+### 6.1 Mandatory Memory Sync triggers
 
-### 6.1 Research-only work does not automatically create a Buddy task
+Run Memory Sync Gate after any of the following:
 
-Not every durable conclusion requires a GitHub Issue or Work Buddy execution. When ChatGPT is only researching, comparing, evaluating, or designing a method—and no repository change or external execution is required—the work should normally remain a ChatGPT-side research activity until a durable conclusion is established.
+- durable fact established
+- durable decision made/rejected
+- project state changes
+- Plan created/changed/completed
+- Issue created/started/completed/blocked/verified/closed
+- Buddy commit/push
+- ChatGPT Review
+- research or experiment reaches a reusable conclusion
+- known fact is superseded by evidence
+- new Unknown or contradiction appears
+- collaboration protocol changes
 
-When the conclusion is durable and cross-project, record the external source as `External Memory` and record our own adopted/rejected rule in the appropriate `Global Memory` file. When it is specific to one project, record the decision in that project's canonical memory.
+### 6.2 No-op is valid
 
-Create a Buddy task only when there is an actual executable repository/project change, experiment, or other auditable action for Buddy to perform. Do not create Issues merely to preserve conversation history or to make research look operational.
+If the work unit produced no durable information, the Agent must explicitly treat the result as:
 
-**Default rule:** `Research / evaluation / design → ChatGPT`; `repository execution / experiment / auditable delivery → GitHub Issue → Buddy`.
+`Memory Sync: NOT NEEDED`
+
+No meaningless commit should be created merely to prove that memory was checked.
+
+### 6.3 Write authority
+
+- **ChatGPT**: decides what is durable, routes it, writes canonical memory, and verifies the write.
+- **Buddy**: writes directly verifiable execution facts in the project repo; reports commit/evidence; does not promote inference or alter Plan.
+- **Read-only Agent**: must emit `MEMORY_SYNC_REQUIRED` when a write is needed and must not claim synchronization succeeded.
+
+### 6.4 Research-only work
+
+Not every durable conclusion requires a GitHub Issue or Work Buddy execution. When ChatGPT is only researching, comparing, evaluating, or designing a method—and no repository change or external execution is required—the work can remain ChatGPT-side until a durable conclusion is established.
+
+Once the conclusion is durable, it must be routed into the appropriate Global / Project / External memory according to `MEMORY_ROUTER.md`. If it changes a project Plan, use the Plan change-control process; do not silently replace the route.
+
+Create a Buddy task only when there is an actual executable repository/project change, experiment, or other auditable action for Buddy to perform.
 
 ## 7. Read policy
 
-When entering a project, read in this order:
+When entering a project, follow `AGENT_GIT_MEMORY_CONTRACT.md` for the mandatory bootstrap sequence.
 
-1. `PROJECT_CONTEXT.md`
-2. `CURRENT_STATE.md`
-3. `NEXT_WORK.md`
-4. relevant `DECISIONS.md`
-5. current Issue
-6. relevant evidence / code / experiment history
+The key principle remains selective loading:
+
+1. Project context
+2. Current state
+3. Navigation
+4. Active Plan
+5. Relevant decisions
+6. Current Issue
+7. Relevant evidence / code / experiment history
 
 Do not load the entire repository by default.
-
-Search/retrieval should be selective. A filesystem-first approach is deliberate: current agent-memory research shows that searchable Markdown/Git can be a strong baseline and is easier to inspect, diff, and recover than opaque vector-only memory.
 
 ## 8. Agent responsibilities
 
@@ -144,13 +170,16 @@ Search/retrieval should be selective. A filesystem-first approach is deliberate:
 - reviews whether memory matches verified project reality
 - resolves contradictions
 - creates the next task when appropriate
+- **automatically performs Memory Sync after durable changes**
 
 ### Work Buddy
 
 - reads project memory before execution
 - treats project memory as context, not as permission to invent requirements
 - reports commit/result evidence
-- may propose memory updates, but verified project state takes precedence
+- may write execution-verifiable facts
+- may propose memory updates
+- **automatically performs Memory Sync after execution checkpoints**
 
 ### GitHub
 
@@ -187,6 +216,7 @@ The protocol is considered successful if, after a fresh conversation:
 - A reviewer can distinguish current facts from superseded decisions.
 - No second parallel task/knowledge system is introduced.
 - The memory files remain small enough to inspect manually.
+- **Human does not need to remind an Agent to synchronize durable memory.**
 
 If these criteria fail at scale, then evaluate a retrieval layer such as QMD/vector search, Mem0, or Graphiti. Do not introduce those dependencies before the file-first baseline is measured.
 
