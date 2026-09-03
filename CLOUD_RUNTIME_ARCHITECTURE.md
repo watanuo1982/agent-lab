@@ -1,7 +1,7 @@
-# Cloud Agent Runtime Architecture v0.2
+# Cloud Agent Runtime Architecture v0.3
 
 > Status: ADOPTED
-> Date: 2026-09-02
+> Date: 2026-09-03
 > Scope: Global Agent System architecture
 
 ## 1. Purpose
@@ -12,7 +12,36 @@ The runtime implementation is maintained in a **separate project repository** fr
 
 The architecture is deliberately **Free-first**: the initial runtime must be implementable on the Cloudflare Free plan. Paid capabilities are introduced only when an actual workload exceeds free-tier limits or requires Sandbox/Containers.
 
-## 2. System responsibility boundaries
+## 2. Architecture evolution — preserve history, do not rewrite it
+
+The Cloud Runtime layer was **not part of the original AI collaboration design**. It was introduced later as an architectural evolution after the earlier GitHub-centered collaboration model exposed a need for durable cloud-side runtime state, workflows, controlled capabilities and eventually autonomous production execution that should not depend on Buddy/local preparation.
+
+The historical sequence is:
+
+```text
+Original collaboration model
+Human → ChatGPT → GitHub Memory → Buddy / project execution
+                         │
+                         │ later evolution
+                         ▼
+                 Cloud Runtime layer
+                         │
+                         ▼
+                    core-agent
+                         │
+             ┌───────────┴───────────┐
+             ▼                       ▼
+     domain runtimes             other capabilities
+```
+
+Therefore:
+
+- historical documents describing the pre-CoreAgent system remain historical facts;
+- later CoreAgent / Cloud Runtime architecture must not be projected backward into those documents;
+- `core-agent` is an **evolved infrastructure layer**, not an original assumption;
+- the introduction of Cloud Runtime is a deliberate architecture change recorded here, while the original model remains auditable through Git history.
+
+## 3. System responsibility boundaries
 
 | Layer | Canonical responsibility |
 |---|---|
@@ -20,17 +49,18 @@ The architecture is deliberately **Free-first**: the initial runtime must be imp
 | ChatGPT | Reasoning, research, architecture, content, decisions, task contracts, review |
 | Agent Hub (`agent-lab`) | Governance, Global Memory, project registry, cross-project coordination and protocols |
 | Project GitHub repositories | Canonical project code, configuration, project Memory, state, decisions, evidence and task history |
-| Buddy | Execution in local/dev environment; implements explicit Issue contracts |
-| Cloud Runtime project | Implementation of cloud runtime components and deployment artifacts |
-| Cloudflare | Cloud runtime: persistent Agent state, scheduling, workflows, APIs, async work, files, optional code execution |
+| CoreAgent (`core-agent`) | Unified cloud Agent Runtime: identity, durable runtime state, workflow orchestration, controlled capability/tool routing and bounded execution coordination |
+| Domain Runtimes | Domain-specific deterministic execution capabilities (for example content or quantitative execution); they do not become generic autonomous agents merely because they run in Cloudflare |
+| Buddy | Development/local execution of explicit GitHub Issue contracts; not a required production-runtime dependency |
+| Cloudflare | Hosting/runtime substrate for CoreAgent and domain runtimes |
 
 Hard rule: **GitHub is Canonical; Cloudflare is Runtime; Buddy is Execution; ChatGPT is Reasoning Owner.**
 
-## 3. Repository boundary
+## 4. Repository boundary
 
 `agent-lab` is the **Agent Hub**, not the Cloud Runtime implementation project.
 
-The Cloud Runtime implementation must live in an independent repository, currently designated:
+The Cloud Runtime implementation lives in the independent repository:
 
 `watanuo1982/-agent-runtime`
 
@@ -40,15 +70,47 @@ The first runtime target inside that project is:
 
 This separation prevents the Global Memory / governance repository from becoming a mixed governance-and-execution repository.
 
-The runtime project follows the existing Project Memory minimum: README, PROJECT_CONTEXT, CURRENT_STATE, NEXT_WORK and GITHUB_WORKFLOW, with DECISIONS / MEMORY_INDEX / CHANGELOG as appropriate.
+## 5. CoreAgent versus Domain Runtime
 
-## 4. Runtime primitives
+The current architecture uses a strict two-level runtime boundary:
 
-### 4.1 Worker
+```text
+ChatGPT
+   │ reasoning / decision / review
+   ▼
+CoreAgent
+   │ unified runtime / context / orchestration
+   ├── GitHub context
+   ├── durable state
+   ├── Workflow
+   ├── controlled MCP/tool capabilities
+   └── bounded routing
+        │
+        ├───────────────┬────────────────
+        ▼               ▼
+AI Content Runtime   Quant Runtime
+(domain execution)   (domain execution)
+```
+
+**CoreAgent is not a second business-domain agent.** It should coordinate and expose bounded capabilities rather than independently inventing content, trading strategies or business decisions.
+
+A Domain Runtime is not automatically a Domain Agent. Keep deterministic/domain execution below CoreAgent unless a separate architecture review demonstrates a real need for agent-level identity, planning and isolation.
+
+Avoid this anti-pattern:
+
+```text
+ChatGPT → CoreAgent → Generic Proxy → Domain Runtime → another Agent → tools
+```
+
+Each added layer must have a demonstrated responsibility; MCP must remain a capability interface, not a generic proxy or hidden second orchestration system.
+
+## 6. Runtime primitives
+
+### 6.1 Worker
 
 Use for stateless HTTP/API entry points, routing, authentication and small transformations.
 
-### 4.2 Agent / Durable Object
+### 6.2 Agent / Durable Object
 
 Use as the persistent identity and runtime state of an Agent.
 
@@ -62,34 +124,34 @@ Agent-local state may include:
 
 Agent state is **not** canonical project Memory.
 
-### 4.3 Workflow
+### 6.3 Workflow
 
 Use for multi-step, long-running, retryable or checkpointed processes.
 
 Typical pattern:
-`Agent -> Workflow -> steps/checkpoints/retry -> result`
+`CoreAgent -> Workflow -> steps/checkpoints/retry -> result`
 
-### 4.4 D1
+### 6.4 D1
 
 Use only for shared structured data that genuinely needs a relational store across runtime components.
 
 Do not use D1 as a dumping ground for large market/history datasets.
 
-### 4.5 R2
+### 6.5 R2
 
 Use for large objects/files: CSV, Parquet, PDFs, images, videos, model artifacts and large experiment outputs.
 
-### 4.6 Queues
+### 6.6 Queues
 
 Use for asynchronous workloads where decoupling is useful. Do not introduce Queues merely because they exist.
 
-### 4.7 Sandbox / Containers
+### 6.7 Sandbox / Containers
 
 Optional paid-capability boundary for isolated Linux execution, Python/Node/Shell, heavy computation and untrusted or dependency-heavy workloads.
 
-Sandbox is **not required for Core Agent v0.1**.
+Sandbox is not required for the current CoreAgent baseline.
 
-## 5. Agent topology
+## 7. Agent topology
 
 Start with exactly one generic runtime Agent:
 
@@ -97,22 +159,18 @@ Start with exactly one generic runtime Agent:
 
 Its responsibility is runtime infrastructure, not business-domain reasoning.
 
-Future domain Agents may include:
-- `quant-agent`
-- `research-agent`
-- `content-agent`
-- `automation-agent`
+Future domain Agents may be introduced only after CoreAgent is stable and a demonstrated isolation/ownership requirement exists.
 
-Do not create domain sub-agents until `core-agent` is stable.
+Do not create `content-agent`, `quant-agent` or other domain Agents merely to wrap existing deterministic Domain Runtimes.
 
-## 6. Canonical Memory boundary
+## 8. Canonical Memory boundary
 
 ```text
 GitHub Memory (canonical)
         |
         +---- ChatGPT reasoning
         |
-        +---- Cloud Runtime project / Cloudflare runtime state
+        +---- CoreAgent / Cloud Runtime
         |
         +---- Buddy execution
 ```
@@ -121,7 +179,7 @@ Cloudflare may cache or persist runtime state, but durable knowledge/decisions/p
 
 Never create a second independent Memory system in Cloudflare.
 
-## 7. Task model
+## 9. Task model
 
 All durable, auditable work remains Issue-first under the existing Agent Git Memory Contract.
 
@@ -140,9 +198,9 @@ artifacts: references to canonical artifacts
 audit: execution metadata
 ```
 
-This is a conceptual schema for v0.1; do not create a second task system outside GitHub Issues until a concrete runtime need is demonstrated.
+This remains a conceptual runtime contract; do not create a competing task system outside GitHub Issues unless a concrete runtime need is demonstrated and separately approved.
 
-## 8. Identity and permissions
+## 10. Identity and permissions
 
 Every Agent has an explicit `agent_id` and capability boundary.
 
@@ -154,7 +212,7 @@ Default posture:
 
 Write/deploy/delete/external side effects require an explicit capability grant and must be auditable.
 
-## 9. Secrets
+## 11. Secrets
 
 Secrets are runtime credentials, not Memory.
 
@@ -162,7 +220,7 @@ Never commit secrets, tokens, API keys or credentials into GitHub Memory or proj
 
 Secrets must be injected through the appropriate runtime/local secret mechanism and exposed to the minimum component that needs them.
 
-## 10. Free-first policy
+## 12. Free-first policy
 
 Initial target:
 
@@ -185,7 +243,7 @@ Upgrade only when:
 
 Sandbox/Containers are explicitly treated as a later paid boundary.
 
-## 11. Deployment phases
+## 13. Deployment phases
 
 ### P0 — Architecture
 Status: ADOPTED
@@ -213,23 +271,23 @@ Connect runtime to GitHub while preserving GitHub as canonical.
 
 Prove a retryable/checkpointed multi-step task.
 
-### P5 — MCP
+### P5 — MCP client capability
 
-Expose only the capabilities required by the Agent System.
+Prove bounded capability consumption through an allowlisted MCP client. A future ChatGPT-facing MCP server is a separate architectural step and is not implied by P5.
 
-### P6 — First real workload
+### P6 — First real workloads
 
-Use a bounded real workload to validate the runtime. Quant is a strong candidate because it naturally exercises data, Python, long-running jobs, schedules and artifacts.
+Use bounded real workloads to validate the runtime. Quant and AI Content are now two distinct domain execution paths under the same runtime architecture.
 
 ### P7 — Sandbox (conditional)
 
 Introduce only if real workloads demonstrate that Buddy/local execution or Workers are insufficient.
 
-### P8 — Sub-agents (conditional)
+### P8 — Domain Agents (conditional)
 
 Split `core-agent` into domain Agents only after the common runtime is stable and there is demonstrated isolation/ownership value.
 
-## 12. Operational safety
+## 14. Operational safety
 
 The runtime must be designed so that Cloudflare failure does not destroy canonical project knowledge.
 
@@ -239,22 +297,24 @@ For every durable execution:
 - execution is auditable;
 - unknown/conflicting facts are not silently promoted to canonical facts.
 
-## 13. Anti-patterns
+## 15. Anti-patterns
 
-Do not introduce, in v0.1:
+Do not introduce:
 - VPS solely to host Agents
 - Kubernetes
 - self-managed Redis/Postgres
 - vector DB without a demonstrated retrieval requirement
-- multiple domain Agents before Core Agent validation
+- multiple domain Agents before CoreAgent validation
 - unrestricted shell execution
 - automatic production deployment
 - Cloudflare as a second Memory source
 - a second task system that competes with GitHub Issues
 - Cloud Runtime implementation code inside `agent-lab`
+- generic MCP proxy / arbitrary MCP endpoint forwarding
+- unnecessary runtime layers between CoreAgent and Domain Runtime
 
-## 14. Decision
+## 16. Decision
 
-**ADOPTED:** Cloudflare is part of the global Agent System architecture as the Cloud Runtime Layer, while its implementation is isolated in the independent `-agent-runtime` project.
+**ADOPTED:** Cloudflare is part of the global Agent System architecture as an evolved Cloud Runtime Layer, while its implementation is isolated in the independent `-agent-runtime` project.
 
-The first implementation target is a Free-plan-compatible `core-agent`; paid compute is an escalation path, not a prerequisite.
+The historical pre-CoreAgent collaboration model remains valid as history and is not rewritten. The current architecture is an explicit evolution: **ChatGPT → CoreAgent → bounded Domain Runtime → GitHub canonical artifacts/state**, with Human retaining real-world authority and Buddy remaining an execution/development role rather than a production-runtime dependency.
