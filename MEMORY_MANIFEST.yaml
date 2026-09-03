@@ -1,9 +1,10 @@
-version: "0.2"
+version: "0.3"
 name: git-memory-runtime
 canonical_repo: watanuo1982/agent-lab
 scope: global
 bootstrap:
-  entry: AGENTS.md
+  mode: mandatory_every_new_session
+  entry: AGENT_GIT_MEMORY_CONTRACT.md
   contract: AGENT_GIT_MEMORY_CONTRACT.md
   global:
     - README.md
@@ -26,11 +27,11 @@ bootstrap:
     - GITHUB_WORKFLOW.md
 routing:
   canonical_rule: MEMORY_ROUTER.md
-  durable_test: "future wrong judgment OR repeated work OR violated direction"
-  scopes:
-    - task
-    - project
-    - global
+durable_test: "future wrong judgment OR repeated work OR violated direction"
+scopes:
+  - task
+  - project
+  - global
 lifecycle:
   durable: [Captured, Classified, Candidate, Validated, Active, Superseded, Archived]
   unknown: [Unknown, Investigating, Resolved, Promoted]
