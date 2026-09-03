@@ -1,4 +1,4 @@
-# Universal Git Memory Contract v1.0
+# Universal Git Memory Contract v1.1
 
 > **适用对象：任何会读取本工作体系 Git/GitHub 的 Agent。**
 > ChatGPT、Buddy/WorkBuddy 以及未来接入本体系的 Agent 都必须遵守。
@@ -11,13 +11,26 @@
 
 只要 Agent：
 
+- 开启一个新的工作 Session；或
 - 读取 `agent-lab`；或
 - 读取任何本体系业务项目仓库；或
 - 收到“检查 Git 的记忆 / 检查 Git 记忆 / 从 Git 恢复上下文 / 继续项目”等请求；
 
 就自动进入 **Git Memory Mode**。
 
-### 1.1 Human 不需要指定启动清单
+### 1.1 新 Session 的强制启动
+
+**Git Memory Bootstrap 是每个新工作 Session 的默认启动动作，不是一个等待 Human 触发的可选动作。**
+
+因此：
+
+- 即使 Human 没有说“检查 Git 的记忆”，只要 Session 开始并准备处理本体系工作，Agent 仍必须先执行 Global Bootstrap；
+- 不得把 ChatGPT session memory、旧聊天、模型参数记忆或“我大概记得”当成 Git Bootstrap 的替代品；
+- 不得因为当前问题看起来简单而跳过 Bootstrap；
+- 若当前项目尚未明确，只完成 Global Bootstrap，不猜项目；
+- 一旦项目明确，立即继续 Project Bootstrap。
+
+### 1.2 Human 不需要指定启动清单
 
 Human 可以只说：
 
@@ -27,12 +40,12 @@ Human 可以只说：
 
 如果之后 Human 指定项目，例如“进入量化项目”，Agent 应在已完成 Global Bootstrap 的基础上自动执行该项目的 Project Bootstrap。
 
-### 1.2 两阶段启动
+### 1.3 两阶段启动
 
 ```text
-Git Memory Mode
+New Session
     ↓
-Global Bootstrap
+MANDATORY Global Bootstrap
     ↓
 识别 / 等待项目上下文
     ↓
@@ -242,6 +255,8 @@ ChatGPT Review 后，再把“已验证结论”提升为 canonical project memo
 
 若没有任何 durable change，则 `Memory Sync: NOT NEEDED`，不产生无意义提交。
 
+若当前 Agent 没有写权限，必须输出 `MEMORY_SYNC_REQUIRED`。
+
 ## 10. Separation of Concerns
 
 ```text
@@ -289,24 +304,28 @@ Human **不负责记忆管理提醒**。
 因此标准启动可以极简：
 
 ```text
-Human: 检查 Git 的记忆。
-Agent: 自动 Global Bootstrap。
-Human: 进入量化项目。
-Agent: 自动 Project Bootstrap + Plan Continuity。
-Agent: 执行/继续工作。
-Agent: 自动 Memory Sync。
+New Session
+    ↓
+Agent 自动 Global Bootstrap
+    ↓
+Human: 进入量化项目 / P03 / 商业雷达
+    ↓
+Agent 自动 Project Bootstrap + Plan Continuity
+    ↓
+Agent 执行/继续工作
+    ↓
+Agent 自动 Memory Sync
 ```
-
----
 
 ## 13. Success Criteria
 
 本协议成立的最低标准：
 
-1. 任一遵约 Agent 听到“检查 Git 的记忆”即可自动启动，无需额外提示词；
-2. Human 进入具体项目后无需重复给读取清单；
-3. 已确认 Plan 不因换 Session 被静默替换；
-4. 有 durable change 时 Agent 自动写回 Git；
-5. 无 durable change 时不产生垃圾提交；
-6. 无写权限时不会假装同步成功；
-7. 所有项目仍保持 repository-level memory isolation。
+1. **每个新 Session 默认执行 Global Bootstrap**，不依赖 Human 的“检查 Git 记忆”提示；
+2. 任一遵约 Agent 听到“检查 Git 的记忆”即可自动启动，无需额外提示词；
+3. Human 进入具体项目后无需重复给读取清单；
+4. 已确认 Plan 不因换 Session 被静默替换；
+5. 有 durable change 时 Agent 自动写回 Git；
+6. 无 durable change 时不产生垃圾提交；
+7. 无写权限时不会假装同步成功；
+8. 所有项目仍保持 repository-level memory isolation。
