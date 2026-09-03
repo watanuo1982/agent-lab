@@ -5,11 +5,12 @@
 ## Current state
 
 - **治理基线**：GMR v0.2 已实施；Git-native、文件优先，无数据库/向量库/第二套任务系统。
-- **Universal Agent entrypoint**：`AGENTS.md` + `AGENT_GIT_MEMORY_CONTRACT.md`；所有读取本体系 Git/GitHub 的 Agent 自动进入 Git Memory Mode。
+- **Universal Agent entrypoint**：`AGENTS.md` + `AGENT_GIT_MEMORY_CONTRACT.md` v1.1；所有新工作 Session 默认先进入 Git Memory Mode。
+- **Mandatory bootstrap**：Global Bootstrap 已明确为**每个新 Session 的强制启动动作**，不依赖 Human 是否说“检查 Git 的记忆”。Session memory / 旧聊天不能替代 Git Bootstrap。
 - **Memory architecture**：四层模型已建立；`MEMORY_ARCHITECTURE.md` 定义模型，`MEMORY_ROUTER.md §1` 是唯一操作性路由规则源。
-- **Runtime manifest**：`MEMORY_MANIFEST.yaml` 已建立，提供机器可读的 Bootstrap、路由、生命周期、写入策略与 Health 检查入口。
+- **Runtime manifest**：`MEMORY_MANIFEST.yaml` v0.3 已建立，提供机器可读的 mandatory-every-new-session Bootstrap、路由、生命周期、写入策略与 Health 检查入口。
 - **Plan continuity**：`PLAN_PROTOCOL.md` 定义已确认计划的 canonical ownership、版本与变更控制；新 Session 默认继续 Active Plan。
-- **Session bootstrap**：`SESSION_BOOTSTRAP.md` v0.3 已由 Universal Agent Contract 自动触发，不再要求 Human 粘贴启动提示词。
+- **Session bootstrap**：`SESSION_BOOTSTRAP.md` v0.3 规定 Global Bootstrap → Project Bootstrap → Plan Continuity → Task Resolution。
 - **Session Trigger Monitor**：GMR v0.2 已正式建立；每轮对话进行轻量 Trigger Scan，强 Trigger 与自然检查点进入 Memory Evaluation。
 - **Automatic Memory Sync**：已正式纳入 Universal Agent Contract 与 GMR v0.2；产生 durable change 时 Agent 必须自动执行 Memory Sync Gate，并在需要时写回 canonical owner；无 durable change 则不产生无意义提交。
 - **Memory Owner**：ChatGPT 在具备 Git 写权限时直接负责 durable-memory 的判断、路由、写回与验证；Buddy 仅负责执行，不是 Memory Owner，也不是 ChatGPT 写回的必要中介。
@@ -18,6 +19,7 @@
 - **Unknown governance**：`UNKNOWN_REGISTRY.md` 是唯一登记与生命周期入口。
 - **Project registry**：`PROJECTS.md` 是跨项目注册表；业务项目的详细事实留在各自仓库。
 - **Task protocol**：GitHub Issue 是正式任务载体；`STATUS:` 评论是审计日志，机器 current status 使用 `status:*` Label。
+- **Cloud Runtime architecture**：Cloud Runtime 是后续演进层，不是原始 AI 协作设计的一部分；当前 canonical architecture 见 `CLOUD_RUNTIME_ARCHITECTURE.md` v0.3，定义 CoreAgent 为统一 Runtime/orchestration 层、Domain Runtime 为受控领域执行层。
 - **Control Tower**：仍只作为设计概念，不在未裁决情况下猜测其实际建立状态。
 
 ## Governance status
@@ -32,13 +34,13 @@
 2. `PROJECTS.md` 跨私有仓库 existence/accessibility 校验需要 `PROJECT_REGISTRY_TOKEN` 才能在 CI 实际执行。
 3. External Memory freshness 目前只有规则层要求，尚无自动检查。
 4. 并发目前采用 Issue ownership + 避免同时修改同一 canonical file；暂不引入 distributed lock。
-5. **真实 cold-start 最终验收仍需 Human 在新 Session 触发；但启动动作本身已不再依赖 Human 提供长提示词。**
+5. **真实 cold-start 的“模型自动调用 GitHub 工具”属于 Agent 执行能力问题，协议层已改为 mandatory；需要后续新 Session 实测验收。**
 6. Trigger Monitor 的语义判断目前主要由遵约 Agent runtime 执行；后续如需要机器化检测，可增加 validator，但不得改变 canonical policy。
 
 ## Recovery path
 
-新会话进入 Agent Hub 时，统一从：
+每个新 Session 的标准恢复路径为：
 
-`AGENTS.md` → `AGENT_GIT_MEMORY_CONTRACT.md` → Global Bootstrap → 项目识别 → Project Bootstrap → Active Plan → Issue → Review → Trigger Monitor / Memory Sync
+`New Session → AGENT_GIT_MEMORY_CONTRACT → Global Bootstrap → 项目识别 → Project Bootstrap → Active Plan → Issue → Review → Trigger Monitor / Memory Sync`
 
-恢复。
+Human 不需要提供启动文件清单，也不需要提醒“上传记忆”。
