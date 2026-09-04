@@ -2,12 +2,14 @@
 
 ## 当前优先级
 
-> **ARCH-001 已冻结（Issue #15 评论 5538205132，2026-09-04）。当前优先级 = 按冻结架构分阶段实施；GMR v0.2 不变，cold-start 验收仍是待办。**
+> **ARCH-001 已冻结；Phase D 治理加固已于 2026-09-04 全部 VERIFIED 收口（D-6 判定 PASS，Issue #40）。当前优先级 = 转回业务项目执行；架构治理进入稳态维护，仅在新执行实例 / 新仓库 / token 轮换 / 漂移迹象时重启。**
 
-1. ⏳ **ARCH-001-IMPL-01（Issue #23）：Phase A + Phase B** —— Hub 自身 canonical 收敛与协议对齐；完成后由 ChatGPT 做只读 Review。
-2. ⬜ **Phase C（后续 Issue）**：逐项目审计（quantitative-trading 只读先行，V7.1 冻结管道不碰；commercial-radar 状态 [Unknown] 先盘点；ai-content；agent-runtime 跟踪 Project Memory PENDING → ADOPTED）。
-3. ⬜ **Phase D（后续 Issue）**：治理加固与周期性 replaceability 测试；完整 Permission Governance 留到本阶段。
-4. ⏳ **GMR v0.2 cold-start acceptance**：开启全新 Session，仅以 Git 为事实源验证恢复能力（冻结前遗留待办，继续有效）。
+1. ⏳ **GMR v0.2 cold-start acceptance（Issue #14）**：开启全新 Session，仅以 Git 为事实源验证恢复能力——Hub 层唯一遗留待办。
+2. ✅ **ARCH-001-IMPL-01（Issue #23）Phase A + Phase B**：完成并 VERIFIED。
+3. ✅ **Phase C 核心目标**：由 D-3（Issue #35）与 D-5（Issue #39）覆盖，不再单独立项。
+4. ✅ **Phase D（D-2 ~ D-6，Issue #29/#35/#37/#39/#40）**：身份分离、状态统一、权限收敛、定位确认全部 VERIFIED / DONE。
+5. 🔧 **顺手项（不立项，随各仓正常任务执行）**：`-agent-runtime` 8 个 open issues 补 `status:*` 标签；消化三业务仓约 24 个 done-but-open 的 Review 积压；`-agent-runtime` 过期 task-state 副本（BUDDY_TASK_CURRENT.md 等）归档。
+6. 📅 **日历项**：fine-grained PAT 约 2026-12-03 到期，轮换后更新 `architecture/IDENTITY_TOKEN_POLICY.md`。
 
 ### 已完成基线（冻结前）
 
