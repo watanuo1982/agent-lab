@@ -26,6 +26,7 @@
 - **M5 Cross-Runtime Handoff**：2026-09-04 完成 buddy-local → core-agent 最小接力实验（-ai-content `005_m5_handoff/`，B 以 `ai-content-cloud-runtime[bot]` 身份仅凭 GitHub 冷启动接手并落笔）；机制链路 PASS，content_revise 下游 4xx 与产出质量偏差已登记（见 Issue #15 M5 回报）。
 - **M6 Identity / Token Separation**：2026-09-04 审计完成——buddy-cloud 已用 GitHub App `ai-content-cloud-runtime`（contents:write + metadata:read，平台签名可辨）实现平台级分离；buddy-local 仍与 Human 共享全权限 classic PAT，fine-grained PAT 创建无 API（实测 404），标记 [Blocked] 待 Human 网页创建（规格与验证协议见 `IDENTITY_TOKEN_POLICY.md` §3.2）；归属判定规则与风险登记同文件。
 - **ARCH-001 Round 5 候选落盘**：2026-09-04 将 Final Architecture Candidate（评论 5537869348）忠实转录为 `ARCH-001_FINAL_ARCHITECTURE.md`（CANDIDATE 未冻结，冻结待 Human 批准）；buddy-local 独立审查结论见 Issue #15。
+- **ARCH-001 Freeze Prep**：2026-09-04 按 buddy-local 最终审查（评论 5537995684）的 5 项 Required Changes 完成 Freeze Candidate 修正：M6 表述如实改为 PARTIAL 并登记 open items（buddy-local fine-grained PAT 创建 / classic PAT 轮换）、Phase A 撤销 -agent-runtime 未注册误判（commit 28a181f8 已注册）、Phase B 清单补全三个新 canonical 文件并加入 README 文件地图规则、Phase C 增加 quantitative-trading 只读先行与 commercial-radar [Unknown] 先盘点护栏；文件状态 `READY FOR HUMAN FINAL APPROVAL`，未冻结。
 - **M0 Governance Enforcement**：2026-09-04 起 main 分支保护已启用（PR-only + required check `validate-memory` + enforce_admins + 禁 force push/删除）；CODEOWNERS 已声明 canonical 文件 owner = Human；验收实验（直推 main 被 GH006 拒绝 / 违规 PR merge 被 405 拒绝）见 Issue #15 M0 回报。
 
 - Issue #4：已完成并关闭；`status:verified`。

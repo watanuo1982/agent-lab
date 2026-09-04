@@ -218,18 +218,21 @@ The architecture is now a **target model**. Implementation must be staged and bo
 2. Add the final architecture as a canonical repository document.
 3. Add a concise implementation map linking governance, receipt, identity, memory and runtime documents.
 4. Keep GMR v0.2 unchanged unless a separate explicit decision supersedes a specific rule.
+5. Project registration status: `-agent-runtime` is **already registered** in `PROJECTS.md` (row `agent-runtime`, ACTIVE, Project Memory PENDING; commit `28a181f8`, 2026-09-02) — no registration fix required. The Round 4 "[Conflict] unregistered" finding is hereby retracted as a measurement error. Phase C audit should track its Project Memory `PENDING → ADOPTED` promotion.
 
 ### Phase B — protocol alignment
 
-5. Align `AGENTS.md`, `AI_OS_ARCHITECTURE.md`, `CLOUD_RUNTIME_ARCHITECTURE.md`, `AGENT_GIT_MEMORY_CONTRACT.md`, `PLAN_PROTOCOL.md`, `CURRENT_STATE.md`, `NEXT_WORK.md` with the frozen architecture.
+5. Align `AGENTS.md`, `AI_OS_ARCHITECTURE.md`, `CLOUD_RUNTIME_ARCHITECTURE.md`, `AGENT_GIT_MEMORY_CONTRACT.md`, `PLAN_PROTOCOL.md`, `CURRENT_STATE.md`, `NEXT_WORK.md`, plus `ARCH-001_FINAL_ARCHITECTURE.md`, `IDENTITY_TOKEN_POLICY.md` and `EXECUTION_RECEIPT.md` with the frozen architecture.
 6. Remove obsolete role/flow descriptions rather than maintaining parallel competing models.
-7. Make Issue-first + Work Contract + Evidence Receipt the single normal task lifecycle.
+7. Make Issue-first + Work Contract + Evidence Receipt the single normal task lifecycle. Every canonical file must be registered in the README file map.
 
 ### Phase C — project integration
 
 For each active project repo (quantitative-trading, AI-content, commercial-radar and other active projects):
 
 8. Audit the project against the frozen role boundary and GitHub workflow.
+   - `quantitative-trading`: read-only audit first. Do not modify production trading logic; the frozen V7.1 pipeline must not be touched by architectural conformity checks.
+   - `commercial-radar`: current status is `[Unknown]` to buddy-local — inventory before any change.
 9. Add only the minimum required project-local contract/state files.
 10. Preserve project isolation; do not copy global memory into project repositories.
 11. Do not alter production logic merely for architectural conformity unless the project audit identifies a concrete violation.
@@ -262,9 +265,16 @@ Already evidenced before this candidate:
 - P0 Validator repair + M2 Execution Receipt
 - M0 GitHub governance foundation
 - M5 Local ↔ Cloudflare CoreAgent cross-runtime handoff
-- M6 execution identity separation
+- M6 execution identity separation — **PARTIAL**: buddy-cloud is platform-separated (GitHub App `ai-content-cloud-runtime`, permissions `contents:write` + `metadata:read`, signed bot commits); buddy-local fine-grained PAT creation is an open Human UI action (GitHub provides no creation API — measured POST 404; spec in `IDENTITY_TOKEN_POLICY.md` §3.2). M6 must not be described as fully complete.
 - GMR v0.2 retained
+
+Open items registered at freeze (tracked, not claimed complete):
+
+- buddy-local fine-grained PAT creation — Human UI action, spec in `IDENTITY_TOKEN_POLICY.md` §3.2; verification protocol pending execution.
+- classic PAT rotation/deprecation after separation (see `IDENTITY_TOKEN_POLICY.md` R-M6-2).
 
 Remaining gate:
 
-**Buddy reviews this exact candidate architecture + adjustment plan. Any conflict must be recorded explicitly. After review, Human makes the final approval. Only then do we freeze and execute Phase A–E.**
+**Buddy review completed — PASS WITH CONDITIONS (Issue #15 comment 5537995684); all 5 required corrections are applied in this Freeze Candidate. Remaining gate: Human Final Approval. Only after approval do we freeze and execute Phase A–E.**
+
+Status: **READY FOR HUMAN FINAL APPROVAL** (not FROZEN).
