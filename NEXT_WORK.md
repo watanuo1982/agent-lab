@@ -1,6 +1,6 @@
 # NEXT_WORK.md — Agent Hub
 
-## Current priority
+## 当前优先级
 
 > **ARCH-001 已冻结（Issue #15 评论 5538205132，2026-09-04）。当前优先级 = 按冻结架构分阶段实施；GMR v0.2 不变，cold-start 验收仍是待办。**
 
@@ -14,17 +14,17 @@
 1. ✅ Issue status Label：已落地并验证。
 2. ✅ `PROJECTS.md` remote existence/accessibility 校验：代码已实现；跨私有仓库 CI 仍需 `PROJECT_REGISTRY_TOKEN` 才能启用。
 3. ✅ GitHub Actions memory structure validator：已实际成功运行，并已纳入 required check（M0）。
-4. ✅ `PLAN_PROTOCOL.md`：已建立，确认计划成为受保护的 canonical project asset。
-5. ✅ `SESSION_BOOTSTRAP.md`：已升级 v0.3，由 Universal Agent Contract 自动触发。
-6. ✅ `AGENT_GIT_MEMORY_CONTRACT.md`：统一所有 Agent 的 Git Memory Mode、Project Bootstrap、Plan Continuity 与自动 Memory Sync。
-7. ✅ GMR v0.2 Session Trigger Monitor / Promotion Policy：已实施（`MEMORY_PROTOCOL.md §13` 与 `MEMORY_MANIFEST.yaml`）。
+4. ✅ `architecture/PLAN_PROTOCOL.md`：已建立，确认计划成为受保护的 canonical project asset。
+5. ✅ `architecture/SESSION_BOOTSTRAP.md`：已升级 v0.3，由 Universal Agent Contract 自动触发。
+6. ✅ `architecture/AGENT_GIT_MEMORY_CONTRACT.md`：统一所有 Agent 的 Git Memory Mode、Project Bootstrap、Plan Continuity 与自动 Memory Sync。
+7. ✅ GMR v0.2 Session Trigger Monitor / Promotion Policy：已实施（`architecture/MEMORY_PROTOCOL.md` §13 与 `MEMORY_MANIFEST.yaml`）。
 8. ✅ ARCH-001 全流程（Round 2–5 → P0/M0/M5/M6 → Freeze Prep → Human Final Approval）完成，见 Issue #15。
 
-## Current rule
+## 当前规则
 
 Agent Hub 不保存业务项目的 Plan 正文；业务 Plan 必须留在对应 Project Repo。Hub 只负责全局 Memory / Plan / Session Bootstrap governance，以及跨项目任务指针。
 
-## Rules
+## 规则
 
 - 不在本文件复制 Issue 正文；正式任务以 GitHub Issue 为准。
 - 新治理任务先建 Issue，再通知 Buddy；但 ChatGPT 自身直接实施 Memory Owner 变更时，不需要 Buddy 作为中介。
@@ -33,3 +33,4 @@ Agent Hub 不保存业务项目的 Plan 正文；业务 Plan 必须留在对应 
 - **Human 不负责提醒 Agent 上传/同步记忆；durable change 发生后由 Agent 自动执行 Memory Sync Gate。**
 - **每轮会话必须进行轻量 Trigger Scan；Trigger 只触发评估，不等于写入。**
 - 没有 durable change 时，不制造无意义 memory commit。
+
