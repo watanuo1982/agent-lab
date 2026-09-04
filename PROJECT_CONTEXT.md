@@ -21,7 +21,7 @@
 4. **`agent-lab` 不是单纯的通知中心**，而是跨项目协作基础设施；Control Tower 若实施，应归属 `agent-lab`。
 5. **Issue 是当前正式任务同步机制，但不是项目全部状态的唯一来源。**
 6. **Projects（Control Tower）的定位只是候选的跨项目态势汇总层**，不是任务入口，也不替代 Issue。
-7. **所有读取本体系 Git 的 Agent 都必须遵守 `AGENT_GIT_MEMORY_CONTRACT.md`；Human 不负责提供启动清单或提醒记忆写回。**
+7. **所有读取本体系 Git 的 Agent 都必须遵守 `architecture/AGENT_GIT_MEMORY_CONTRACT.md`；Human 不负责提供启动清单或提醒记忆写回。**
 8. **产生 durable change 的 Agent 必须自动执行 Memory Sync Gate；没有 durable change 才可以不写回。**
 
 ## 三、Control Tower（GitHub Projects v2）定位
@@ -35,7 +35,7 @@
   - Project 字段值与 Issue 真实状态双向不同步，是快照而非活链接。
 - **本次任务不新建 / 不扩展 Project**，除非后续明确指令且权限/工具实际可用。
 - ⚠️ **记载冲突（`[Unknown]`，2026-08-30 记）**：本 Issue（#1）2026-08-29 08:05 UTC 的评论称 Control Tower **已建立**并给出 `https://github.com/users/watanuo1982/projects/1`（3 Issue / 2 视图 / 5 字段），与 08:36 UTC 的更正评论及本文件上面的「尚未实际建立」表述**互相矛盾**。
-  **在 Human / ChatGPT 裁决前不改任何一方的表述**，冲突登记在 `MEMORY_ARCHITECTURE.md` §10 **U-A**，路由测试 R-10。
+  **在 Human / ChatGPT 裁决前不改任何一方的表述**，冲突登记在 `architecture/MEMORY_ARCHITECTURE.md` §10 **U-A**，路由测试 R-10。
 
 ## 四、Buddy 跨仓库工作约定
 
@@ -43,20 +43,21 @@
 2. 判断某仓库「是否空闲 / 进展到哪」时，**必须综合仓库成果与文档，不得仅凭 Issue 计数下结论**。
 3. 执行任务只在目标 Project Repo 内 commit/push；跨项目索引与协议变更才落在 `agent-lab`。
 4. 回报遵循各仓库约定的 DONE / BLOCKED 模板（如 `-commercial-radar` 的 `GITHUB_WORKFLOW.md`），附 commit SHA，保持 Issue open 等待 Review。
-5. Buddy 同样受 `AGENT_GIT_MEMORY_CONTRACT.md` 约束：完成执行 checkpoint 后自动检查并同步可直接证明的 durable execution facts。
+5. Buddy 同样受 `architecture/AGENT_GIT_MEMORY_CONTRACT.md` 约束：完成执行 checkpoint 后自动检查并同步可直接证明的 durable execution facts。
 
 ## 五、与现有 Hub 文档的关系
 
 - `README.md`：Hub 定位、协作流程、状态模型、文件地图。
-- `AGENT_GIT_MEMORY_CONTRACT.md`：**所有 Agent 的统一 Git Memory 入口、自动启动、Plan continuity 与自动 Memory Sync 合同。**
+- `architecture/AGENT_GIT_MEMORY_CONTRACT.md`：**所有 Agent 的统一 Git Memory 入口、自动启动、Plan continuity 与自动 Memory Sync 合同。**
 - `PROJECTS.md`：项目注册表（四仓库登记）+ 新项目接入规范 + Project Memory 采用状态。
 - `INBOX.md`：跨项目任务指针（不复制任务正文）。
-- `MEMORY_ARCHITECTURE.md`：**四层记忆模型（Global / Project / External / Session）的 canonical 定义** —— 归属、证据语义、冲突处理、读写职责、接入规范。
-- `MEMORY_ROUTER.md`：一条新信息该写到哪的判定程序 + 路由测试记录。
-- `MEMORY_PROTOCOL.md`：什么值得记 / 记录字段 / 写入时机 / 设计参考（P0 草案，仍有效）。
-- `SESSION_BOOTSTRAP.md`：ChatGPT Session 恢复与 Plan continuity 的专门协议。
-- `PLAN_PROTOCOL.md`：Plan 版本与变更控制。
+- `architecture/MEMORY_ARCHITECTURE.md`：**四层记忆模型（Global / Project / External / Session）的 canonical 定义** —— 归属、证据语义、冲突处理、读写职责、接入规范。
+- `architecture/MEMORY_ROUTER.md`：一条新信息该写到哪的判定程序 + 路由测试记录。
+- `architecture/MEMORY_PROTOCOL.md`：什么值得记 / 记录字段 / 写入时机 / 设计参考（P0 草案，仍有效）。
+- `architecture/SESSION_BOOTSTRAP.md`：ChatGPT Session 恢复与 Plan continuity 的专门协议。
+- `architecture/PLAN_PROTOCOL.md`：Plan 版本与变更控制。
 - `external/`：External Memory —— 外部知识的指针与判据，**不是事实源**。
 - **本文件**：四仓库边界 + 状态判断语义 + Control Tower 定位，作为跨项目共同上下文。
 
-> 记忆架构的完整入口是 `MEMORY_ARCHITECTURE.md`；所有 Agent 的实际启动与同步入口是 `AGENT_GIT_MEMORY_CONTRACT.md`。
+> 记忆架构的完整入口是 `architecture/MEMORY_ARCHITECTURE.md`；所有 Agent 的实际启动与同步入口是 `architecture/AGENT_GIT_MEMORY_CONTRACT.md`。
+
