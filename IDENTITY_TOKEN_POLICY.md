@@ -125,3 +125,56 @@ buddy-local 侧分离（H1–H4）严格依赖 GitHub 仅有的网页操作入�
 | 2026-09-04 | buddy-local | D-2 H3（PR #31）：fine-grained PAT 创建落地 + 四步验证全过 + 本地接线完成；剩 **H4（Human 轮换 classic PAT）**，完成后 R-M6-1 关闭、D-2 完全收口 |
 | 2026-09-04 | buddy-local | D-2 H4 收口（PR #33）：Human 撤销 classic PAT（钥匙串实测 401，死条目已清除）；§1 登记表、§4 R-M6-1/R-M6-2 更新；-agent-runtime clone 接线；**R-M6-1 CLOSED，D-2 完全收口**；新开 R-POST-D2-1（-quantitative-trading / -commercial-radar 本地凭证待 Human 决策） |
 | 2026-09-04 | buddy-local | R-POST-D2-1 收口（PR #34）：Human 在 UI 将 -quantitative-trading / -commercial-radar 扩入 token 仓库范围（API 实测 200），-quantitative-trading clone 接线完成；token 现覆盖五仓库 |
+| 2026-09-04 | buddy-local | D-4（agent-lab#37）：新增 §7 权限治理基线——canonical permission matrix、least-privilege L1–L7 实测、凭证卫生、residual risk U1–U6 登记；结论 PASS WITH CONDITIONS |
+
+## 7. 权限治理基线（D-4，agent-lab#37，2026-09-04）
+
+> executor: `buddy-local` ｜ execution_id: `buddy-local-20260904200000` ｜ 结论：**PASS WITH CONDITIONS**
+> 依据 ARCH-001 frozen semantics、本文件（§1–§4）、`EXECUTION_RECEIPT.md`；不新增基础设施，不改 G-1 Option C（业务仓 private + Free）。
+
+### 7.1 Canonical Permission Matrix（2026-09-04 实测）
+
+| 执行体 | 载体 / 凭证 | GitHub 能力边界 | 明确不授 | 凭证存储 | 关键实测证据 |
+|---|---|---|---|---|---|
+| `buddy-local` | fine-grained PAT（§3.2 规格，93 字符） | 五注册仓 Contents/PR/Issues RW + Metadata R；Actions secrets 读 403、workflows 写 403 | workflows / secrets / administration / admin:* | `~/.workbuddy/secrets/buddy_local_gh_pat`（600） | D-2 四步验证 + D-4 复测（A1–A3） |
+| `buddy-cloud` | GitHub App `ai-content-cloud-runtime` | 仅 `-ai-content` 生效：contents:write + metadata:read | App 未申请任何 admin/workflow 权限 | Cloudflare Runtime 侧 | D-4 复测：近 3 仓 commit actor 扫描，bot 仅出现于 -ai-content（D1）；D-2 F3 签名证据 |
+| `chatgpt` | WorkBuddy GitHub MCP 连接器 | 经本地 connector-proxy，平台签发 `Authorization` header（+ `X-WorkBuddy-MCP-Context`） | 不读取 osxkeychain / 本地 token 文件 | 平台侧（本地不落盘） | D-4 复测（F 项） |
+| `human` | 浏览器 + GitHub UI（owner） | 全量（仅限本人账号交互） | —（全量属 owner 本职） | 无常驻本地凭证（osxkeychain github.com 条目为空） | D-4 E2 |
+| CI（agent-lab `validate-memory`） | repo `GITHUB_TOKEN`（+ 可选 `PROJECT_REGISTRY_TOKEN`） | workflow 文件显式声明 `permissions: contents: read, issues: read`；跨仓库 status 检查 opt-in（D-3 PR #36） | 未配置 token 时 WARN 跳过 | GitHub Actions secrets | `memory-structure.yml` 声明即证据 |
+
+**Authority 边界**：架构决策 = Human + ChatGPT；任务合同/Review = ChatGPT（Issue-first）；执行 = buddy-local / buddy-cloud（Receipt 规范约束）；Human UI 动作不得由任何实例猜测或绕过。
+
+### 7.2 Least-privilege 实测结果（2026-09-04，全部 [Fact]）
+
+| # | 检查项 | 结果 |
+|---|---|---|
+| L1 | buddy-local repo scope = 五注册仓，逐仓 API 200；范围外访问不可达（D-2 负向 404 仍有效） | ✅ |
+| L2 | buddy-local Actions secrets 读 → 403；workflows 写 → 403（未产生任何文件） | ✅ 最小权限 |
+| L3 | GitHub App bot actor 仅出现于 -ai-content（-agent-runtime / agent-lab / qt / cr 近 3 commit 无 bot） | ✅ App 安装范围收敛 |
+| L4 | 业务四仓（qt / ai / cr / runtime）**均无 `.github` 目录** = 零 Actions/CI 攻击面；agent-lab CI 面积 = 1 workflow + CODEOWNERS + ISSUE_TEMPLATE | ✅ |
+| L5 | CI workflow 显式最小 `permissions:` 声明（contents: read, issues: read） | ✅ |
+| L6 | 五仓可见性：agent-lab = **public**；其余四仓 private（G-1 Option C 遵守） | [Fact]，agent-lab 公开意图见 §7.4 U2 |
+| L7 | 无共享高权限凭证残留：classic PAT 已撤销（D-2 H4），钥匙串 github.com 条目为空 | ✅ |
+
+### 7.3 本地凭证卫生（2026-09-04 实测）
+
+- `~/.workbuddy/secrets/`（700）：`buddy_local_gh_pat`（600）、`github-credential-store`（600，仅含 fine-grained PAT）
+- 4 个本地 clone remote URL 全部为干净 URL（无嵌 token）
+- 全局 `credential.helper = osxkeychain`（无明文值）；keychain 无 github.com 条目 → **未配置的仓库 git 操作 fail-closed**
+- MCP 连接器配置无本地凭据引用
+
+### 7.4 Residual risk / Unknown（接受或待 Human/ChatGPT 决策，均不阻塞判定）
+
+| # | 类型 | 内容 | 处置 |
+|---|---|---|---|
+| U1 | Residual | 业务四仓 main 分支保护状态无法经 API 审计（PAT 无 admin）——G-1 Option C 已定 discipline layer + Actions validator + periodic Git history audit | 接受；periodic audit 时由 Human UI 复核 |
+| U2 | Human Decision | `agent-lab` 为 **public** 仓库（Hub 无业务内容/密钥，但身份治理文档对外可见）。确认公开是否有意；如需转 private 为 Human UI 动作 | 待 Human |
+| U3 | Human Action | D-3 遗留：CI 跨仓库 status 检查需在 agent-lab 配置 `PROJECT_REGISTRY_TOKEN` secret（PAT 无 secrets 读权限，配置状态不可 API 审计） | 待 Human |
+| U4 | Known | fine-grained PAT 约 2026-12-03 到期，轮换时更新本文件 | 日历项 |
+| U5 | Unknown | Cloudflare CoreAgent 的 runtime 侧 preflight 日志不在本地可达范围；当前机器证据 = App 身份 + 权限 + bot actor containment。runtime 侧深度审计属 -agent-runtime 项目 scope | 移交 agent-runtime 项目 |
+| U6 | [Fact] 注记 | qt 个别历史 commit（`ecd6ccd`/`a3e1cfc`）author 登录名不可解析——author 字段为自声明元数据（§2），平台 push actor 才是权威；无安全影响 | 记录在案 |
+
+### 7.5 判定依据
+
+PASS WITH CONDITIONS：L1–L5/L7 机器验证全绿（least privilege、范围收敛、零共享凭证、CI 面积最小、通道独立）；
+U2/U3 为 Human UI 动作，U1/U5 为已登记的 residual risk，无架构漂移、无新增基础设施、无业务逻辑改动。
