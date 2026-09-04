@@ -57,7 +57,13 @@ Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap�
 | `SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
 | `EXECUTION_RECEIPT.md` | **Execution Receipt 规范（M2）：执行回执字段、`produced_by` 独立性分级（Evidence-first，Agent 自述不构成独立 Evidence）** |
 | `IDENTITY_TOKEN_POLICY.md` | **实例身份与凭证映射（M6）：实例 ID 登记、归属判定规则、目标凭证规格与风险登记（不含任何 token 值）** |
-| `ARCH-001_FINAL_ARCHITECTURE.md` | **ARCH-001 最终架构候选（Round 5 转录，CANDIDATE 未冻结）：五层职责、权威模型、Work Contract、Evidence-first、治理与 Phase A–E 实施计划** || `CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
+| `ARCH-001_FINAL_ARCHITECTURE.md` | **ARCH-001 最终架构（已冻结，canonical baseline，Human 批准见 Issue #15 评论 5538205132）：五层职责、权威模型、Work Contract、Evidence-first、治理与 Phase A–E 实施计划** |
+| `CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
+| `AGENTS.md` | GMR v0.2 运行时入口（intentionally tiny）：Git Memory Mode 触发与强制行为清单 |
+| `AI_OS_ARCHITECTURE.md` | 冻结前的 AI OS 系统架构描述（v1.0，2026-08-30 审计产物）；全局架构以 `ARCH-001_FINAL_ARCHITECTURE.md` 为 canonical，本文保留为系统描述与行业对齐参考 |
+| `PLAN_PROTOCOL.md` | 已确认 Plan 的 canonical governance：版本、生命周期、变更控制与冷启动连续性 |
+| `MEMORY_MANIFEST.yaml` | 机器可读的 Runtime manifest（v0.3）：Bootstrap / 路由 / 生命周期 / 写入策略 / Health 检查入口 |
+| `MEMORY_MODEL.md` | 记忆模型核心概念定义 |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
@@ -137,6 +143,8 @@ READY → IN_PROGRESS → DONE → VERIFIED → CLOSED
 状态迁移时必须先移除旧的 `status:*` Label，再添加新的 `status:*` Label；任何 Issue 同时拥有 0 个或超过 1 个 `status:*` Label 都属于治理错误。
 
 当前兼容期允许继续写 `STATUS:` 评论，以保持既有历史流程可读；新工具或自动化不得依赖扫描历史评论来推断唯一当前状态。
+
+**DONE / VERIFIED 语义（与 ARCH-001 §6 一致，冻结后统一口径）**：`DONE` = executor claim（执行者自述，只是 `agent-declared` 级线索）；`VERIFIED` 必须同时满足 machine verification ∧ independent/non-executor review ∧ required Human approval ∧ canonical promotion。只有 `VERIFIED` 才可推进 canonical state / Memory Promotion。
 
 ## ChatGPT ↔ Buddy 的默认交互
 

@@ -3,6 +3,8 @@
 > Status: Drafted from architecture audit, 2026-08-30
 > Canonical owner: `agent-lab`
 > Scope: Cross-project AI working system for Human + ChatGPT + WorkBuddy/Codex + GitHub
+>
+> **与 ARCH-001 的关系（2026-09-04 起）**：全局架构的 canonical baseline 是已冻结的 `ARCH-001_FINAL_ARCHITECTURE.md`（Human 批准，Issue #15 评论 5538205132）。本文件保留为冻结前的系统描述与行业对齐参考；凡与 ARCH-001 冲突之处（权威模型、层结构），以 ARCH-001 为准——ARCH-001 定义了本文件未覆盖的 Runtime 层与 Evidence/Verification 层（见 `CLOUD_RUNTIME_ARCHITECTURE.md`），并统一 `DONE`/`VERIFIED` 完成语义。
 
 ## 1. Purpose
 
@@ -144,7 +146,7 @@ Current preferred division:
 - **Codex/other coding agents**: coding-heavy execution when appropriate.
 - **GitHub**: durable state, task contracts, artifacts, history and audit trail.
 
-Agents are workers, not authorities. Replacing an agent must not require migrating the project's memory into that agent.
+**Authority model (aligned with frozen ARCH-001 §3)**: Human is the sole final authority; agents are authority-peers with asymmetric capabilities — no agent commands another (cross-agent interaction is request / assign / accept); authority is never transferred transitively (an executor cannot grant another executor permissions it does not possess). Replacing an agent must not require migrating the project's memory into that agent.
 
 ## 8. Workflow vs Agent
 

@@ -72,6 +72,7 @@ evidence_note: >
 ## 6. 与现有体系的关系
 
 - **GMR v0.2 / MEMORY_MANIFEST.yaml**：零修改。Receipt 是 task-scope 过程记录，路由规则照旧（MEMORY_ROUTER.md）。
+- **ARCH-001（已冻结 canonical，Issue #15 评论 5538205132）§6 完成语义**：`DONE` = executor claim；`VERIFIED` = machine verification ∧ independent/non-executor review ∧ required Human approval ∧ canonical state promotion。本规范的 `produced_by` 分级是判断 Evidence 能否满足前两项的机器可查依据（`ci-generated` / `runtime-executed` / `tool-verified` 支持机器验证；`agent-declared` 封顶为线索级）。
 - **README「状态模型」**：`status:*` Label 仍是机器可查的 current status；`STATUS:` 评论降级为审计日志——Receipt 是审计日志的**结构化超集**。
 - **CI（memory-structure.yml）**：绿 run 本身就是 `ci-generated` Evidence；required check 化（M0）后即为机器级完成依据。
 - **演进**：本规范为 v1。字段变更走 ARCH-001 正常流程（Issue 提案 → Round 评审 → Human 决策），不得静默修改。
