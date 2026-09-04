@@ -1,0 +1,32 @@
+name: 任务 / Task
+description: 新建可审计任务（Issue-first 规则）。创建后自动携带 status:ready 标签。
+labels: ["status:ready"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: 要达成什么结果，一句话说清。
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope / Constraints
+      description: 范围边界、约束（不改什么、不新增什么）。
+    validations:
+      required: true
+  - type: textarea
+    id: dod
+    attributes:
+      label: Definition of Done
+      description: 完成的判定标准（可验证的条目）。
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence Required
+      description: 需要什么执行证据（commit SHA / CI run / 产物哈希等，见 EXECUTION_RECEIPT.md）。
+    validations:
+      required: false

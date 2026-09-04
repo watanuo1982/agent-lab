@@ -86,7 +86,13 @@ def validate_issue_status(errors: list[str]) -> None:
         if "pull_request" in issue: continue
         labels = {x["name"] for x in issue.get("labels", []) if x.get("name") in ISSUE_STATUS}
         if len(labels) != 1:
-            errors.append(f"Issue #{issue['number']} must have exactly one status:* Label; found {sorted(labels)}")
+            valid = "|".join(sorted(ISSUE_STATUS))
+            errors.append(
+                f"Issue #{issue['number']} must have exactly one status:* Label; found {sorted(labels)}. "
+                f"Fix: add exactly one of [{valid}] via the GitHub UI or "
+                f"POST /repos/{repo}/issues/{issue['number']}/labels. "
+                f"See README.md '状态模型' for the transition rule."
+            )
 
 
 def validate_project_registry_remote() -> None:
