@@ -56,3 +56,4 @@ Buddy 收到通知后：
 - 项目详细工作不得重新集中写入 `INBOX.md`。
 - 不同项目之间不得共享 `NEXT_WORK.md` 或混写项目任务。
 - `INBOX.md` 的任务状态不得取代 Project Repo 的 GitHub Issue status；Issue 才是执行合同。
+
