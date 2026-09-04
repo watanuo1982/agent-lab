@@ -1,0 +1,29 @@
+# M0 Governance (ARCH-001): canonical files review owner = Human (watanuo1982)
+# Note: require_code_owner_reviews is currently OFF — with a single shared
+# identity (Human + agents on one account) it would deadlock all merges.
+# Ownership is declared now; enforcement can be enabled after M6 per-instance
+# tokens separate authorship. See Issue #15 M0 report.
+
+# Default owner for everything
+* @watanuo1982
+
+# Canonical governance files (explicit, so future default changes never drop them)
+/README.md @watanuo1982
+/PROJECTS.md @watanuo1982
+/PROJECT_CONTEXT.md @watanuo1982
+/CURRENT_STATE.md @watanuo1982
+/NEXT_WORK.md @watanuo1982
+/MEMORY_ARCHITECTURE.md @watanuo1982
+/MEMORY_MANIFEST.yaml @watanuo1982
+/MEMORY_MODEL.md @watanuo1982
+/MEMORY_PROTOCOL.md @watanuo1982
+/MEMORY_ROUTER.md @watanuo1982
+/UNKNOWN_REGISTRY.md @watanuo1982
+/AGENT_GIT_MEMORY_CONTRACT.md @watanuo1982
+/SESSION_BOOTSTRAP.md @watanuo1982
+/PLAN_PROTOCOL.md @watanuo1982
+/CLOUD_RUNTIME_ARCHITECTURE.md @watanuo1982
+/EXECUTION_RECEIPT.md @watanuo1982
+/INBOX.md @watanuo1982
+/.github/ @watanuo1982
+/scripts/ @watanuo1982
