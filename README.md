@@ -56,6 +56,7 @@ Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap�
 | `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
 | `SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
 | `EXECUTION_RECEIPT.md` | **Execution Receipt 规范（M2）：执行回执字段、`produced_by` 独立性分级（Evidence-first，Agent 自述不构成独立 Evidence）** |
+| `IDENTITY_TOKEN_POLICY.md` | **实例身份与凭证映射（M6）：实例 ID 登记、归属判定规则、目标凭证规格与风险登记（不含任何 token 值）** |
 | `CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
