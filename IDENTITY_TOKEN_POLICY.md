@@ -33,10 +33,15 @@ GitHub App 公开档案 `https://github.com/apps/ai-content-cloud-runtime`、
 GitHub App `ai-content-cloud-runtime`：permissions = `contents:write`、`metadata:read`。
 任何新增权限须先在本文件登记理由再操作。
 
-### 3.2 buddy-local（[Blocked] 待 Human 创建）
+### 3.2 buddy-local（✅ 2026-09-04 已分离接线，H1–H3 完成）
 
 GitHub 不提供 fine-grained PAT 的创建 API（实测 `POST /user/personal-access-tokens` → 404），
 创建必须由 Human 在网页完成。规格（最小集）：
+
+> **2026-09-04 D-2 H3 状态更新**：token 已由 Human 创建并落地于本节规定存放路径；四步验证协议全部通过
+>（回执 `archive/fine-grained-pat-verification-20260904.md`，PR #31，全程由该 token 经 REST API 完成）。
+> 本地 agent-lab / -ai-content clone 的 credential.helper 已切换为 `store --file=<secrets>/github-credential-store`。
+> Expiration 90 天——**约 2026-12-03 到期，轮换时更新本文件**。
 
 - **Token name**：`buddy-local (WorkBuddy local instance)`
 - **Expiration**：90 days（到期轮换，轮换时更新本文件）
@@ -58,6 +63,8 @@ GitHub 不提供 fine-grained PAT 的创建 API（实测 `POST /user/personal-ac
 
 - **R-M6-1 [Conflict]**：classic PAT 在分离完成前仍被 Human 与 buddy-local 共享，
   Git 历史/操作日志无法区分二者，M0 的治理防线对此不可审计。
+  **2026-09-04 更新**：buddy-local 已切换至 fine-grained PAT（§3.2），R-M6-1 收窄为
+  「Human 自身的 classic PAT 在 H4 轮换/撤销前仍是 20-scope 高权限凭证」。
 - **R-M6-2**：classic PAT 曾在历史对话与本地 stdout 输出中出现（前缀可溯），
   分离完成后 Human 应将其**轮换**（撤销旧 PAT 需网页操作，API 无法自删）。
 - **R-M6-3**：持有 admin 权限的凭证理论上可先关闭分支保护再直推 main，
@@ -106,3 +113,4 @@ buddy-local 侧分离（H1–H4）严格依赖 GitHub 仅有的网页操作入�
 |---|---|---|
 | 2026-09-04 | buddy-local | 初版：登记实测状态、归属规则、目标规格、[Blocked] 项与风险 |
 | 2026-09-04 | buddy-local | D-2（agent-lab#29）：F1–F6 复核登记、创建 secrets 落地目录、登记 H1–H4 blocker；结论 PASS WITH CONDITIONS |
+| 2026-09-04 | buddy-local | D-2 H3（PR #31）：fine-grained PAT 创建落地 + 四步验证全过 + 本地接线完成；剩 **H4（Human 轮换 classic PAT）**，完成后 R-M6-1 关闭、D-2 完全收口 |
