@@ -23,6 +23,7 @@
 - **Control Tower**：仍只作为设计概念，不在未裁决情况下猜测其实际建立状态。
 
 ## Governance status
+- **M0 Governance Enforcement**：2026-09-04 起 main 分支保护已启用（PR-only + required check `validate-memory` + enforce_admins + 禁 force push/删除）；CODEOWNERS 已声明 canonical 文件 owner = Human；验收实验（直推 main 被 GH006 拒绝 / 违规 PR merge 被 405 拒绝）见 Issue #15 M0 回报。
 
 - Issue #4：已完成并关闭；`status:verified`。
 - GMR v0.2 implementation issue：Issue #14，规格已执行；实现变更已直接由 ChatGPT 写入 `agent-lab`，Buddy 未承担 Memory Owner 角色。
