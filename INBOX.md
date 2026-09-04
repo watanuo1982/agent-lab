@@ -8,10 +8,9 @@
 
 | task | status | project | repository | project_entry | next_work | assigned_at | assigned_by |
 |---|---|---|---|---|---|---|---|
-| `#15 — External Candidate Validation` | `ASSIGNED` | quantitative-trading | `watanuo1982/-quantitative-trading` | `PROJECT_CONTEXT.md` | `NEXT_WORK.md` → Issue #15 | 2026-09-02 | ChatGPT |
 
-> 项目当前 Active Plan：`plans/PLAN_V71_CANONICAL_RECONCILIATION_v1.md`（v1）。
-> 具体任务合同只在 quantitative-trading Issue #15 中。
+> 当前无跨项目任务指针。新任务由 ChatGPT 在业务仓库建 Issue 后在此登记（仅指针，不复制正文）。
+> 历史任务见 `archive/YYYY-MM.md`（最近一批：qt #15 External Candidate Validation，已于 2026-09-04 确认 VERIFIED 后归档）。
 
 ## 新任务格式
 
