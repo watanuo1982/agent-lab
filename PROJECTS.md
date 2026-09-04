@@ -32,7 +32,7 @@
 
 **不需要**：数据库、向量检索、记忆服务。文件-first 基线的效果没被测量之前，不引入这些依赖。
 
-完整规范见 `MEMORY_ARCHITECTURE.md` §8；已落地的参考实现见 `-commercial-radar`（Issue #9）。
+完整规范见 `architecture/MEMORY_ARCHITECTURE.md` §8；已落地的参考实现见 `-commercial-radar`（Issue #9）。
 
 ## 项目 repository 自己负责
 
@@ -62,3 +62,4 @@ Agent Hub 不复制上述内容，只保存跨项目的任务指针、项目地�
 - ChatGPT：负责 Runtime 架构、研究、方案、任务合同与 Review
 
 不得把 Runtime implementation code、部署配置或运行时项目 Memory 搬入 `agent-lab`，除非未来发生经过 Evidence → Evaluation → Change Proposal → Approval 的架构变更。
+
