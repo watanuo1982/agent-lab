@@ -13,6 +13,7 @@ HUB_REQUIRED = ["README.md", "PROJECT_CONTEXT.md", "CURRENT_STATE.md", "NEXT_WOR
 PROJECT_REQUIRED = ["README.md", "PROJECT_CONTEXT.md", "CURRENT_STATE.md", "NEXT_WORK.md", "GITHUB_WORKFLOW.md"]
 UNKNOWN_STATUSES = {"OPEN", "REVIEW_DUE", "RESOLVED", "RETAINED_UNKNOWN", "ARCHIVED"}
 ISSUE_STATUS = {"status:ready", "status:in-progress", "status:done", "status:verified", "status:blocked", "status:hold"}
+D3_PROJECT_REPOS = {"-quantitative-trading", "-commercial-radar", "-ai-content"}  # agent-lab#35 (D-3) scope
 
 
 def fail(errors: list[str]) -> int:
@@ -95,6 +96,33 @@ def validate_issue_status(errors: list[str]) -> None:
             )
 
 
+def validate_project_issue_status(errors: list[str]) -> None:
+    """D-3 cross-repository check: every open Issue in each D-3 project repo must carry
+    exactly one canonical status:* Label. Opt-in via PROJECT_REGISTRY_TOKEN."""
+    token = os.environ.get("PROJECT_REGISTRY_TOKEN")
+    if not token:
+        print("WARN: PROJECT_REGISTRY_TOKEN unavailable; project Issue status check skipped")
+        return
+    for project_id, repo in registered_repositories():
+        if repo.split("/", 1)[1] not in D3_PROJECT_REPOS:
+            continue
+        try:
+            issues = api_json(f"https://api.github.com/repos/{repo}/issues?state=open&per_page=100", token)
+        except Exception as exc:
+            errors.append(f"{project_id} ({repo}) issue status check failed: {exc}")
+            continue
+        for issue in issues:
+            if "pull_request" in issue: continue
+            labels = {x["name"] for x in issue.get("labels", []) if x.get("name") in ISSUE_STATUS}
+            if len(labels) != 1:
+                valid = "|".join(sorted(ISSUE_STATUS))
+                errors.append(
+                    f"{project_id} ({repo}) issue #{issue['number']} must have exactly one status:* Label; "
+                    f"found {sorted(labels)}. Fix: remove old status:* then add exactly one of [{valid}]. "
+                    f"See agent-lab README.md '状态模型'."
+                )
+
+
 def validate_project_registry_remote() -> None:
     """Optional cross-repository check. Requires a token with access to private project repos."""
     token = os.environ.get("PROJECT_REGISTRY_TOKEN")
@@ -124,6 +152,7 @@ def main() -> int:
         if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo): errors.append(f"Invalid repository reference for {project_id}: {repo}")
     validate_unknown_registry(errors)
     validate_issue_status(errors)
+    validate_project_issue_status(errors)
     try: validate_project_registry_remote()
     except RuntimeError as exc: errors.append(str(exc))
     return fail(errors) if errors else (print("OK: agent-lab memory structure, Unknown registry and Issue status are valid") or 0)
