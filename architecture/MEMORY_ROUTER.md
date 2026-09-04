@@ -86,6 +86,8 @@ Q5  无法判定 → 不写入事实层。标 `[Unknown]`，**必须登记 `UNKN
 
 **统计**：External 3 · Project 3 · Global 2 · Session 1 · Pending/`[Unknown]` 2 —— 共 11 例，超过 DoD 要求的 8 例。
 
+> 注（2026-09-04，D-3 对齐）：R-07 登记的是登记当时的状态模型实践；D-3 起 current status 以 `status:*` Label 为准（`agent-lab/README.md`「状态模型」），Issue 评论中的 `STATUS:` 降级为审计日志。历史测试记录按 provenance 原则保留不改写。
+
 ### 测试用例的选取说明
 
 刻意覆盖了四种「容易路由错」的边界：

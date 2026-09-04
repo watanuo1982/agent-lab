@@ -47,7 +47,7 @@ Agent 就自动读取 `architecture/AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Glob
 |---|---|
 | `architecture/AGENT_GIT_MEMORY_CONTRACT.md` | **所有 Agent 的统一 Git Memory 入口、自动启动与自动写回合同** |
 | `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
-| `PROJECT_CONTEXT.md` | 四仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
+| `PROJECT_CONTEXT.md` | 五仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
 | `CURRENT_STATE.md` | Agent Hub 自身当前治理状态与恢复入口 |
 | `NEXT_WORK.md` | Agent Hub 自身下一步导航；正式任务仍以 Issue 为准 |
 | `architecture/MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
@@ -80,6 +80,7 @@ Agent 就自动读取 `architecture/AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Glob
 - `-quantitative-trading`：量化研究 / 实盘策略
 - `-ai-content`：AI 内容生产
 - `-commercial-radar`：商业机会雷达
+- `-agent-runtime`：Cloud Runtime / Agent 执行基础设施（Cloudflare `core-agent`）
 
 `-work-buddy-lab` 是历史工具协作实验仓库，已删除，不属于当前项目注册表。历史资料如需引用，应以 Git 历史或其他明确证据为准。
 

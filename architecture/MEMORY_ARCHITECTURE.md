@@ -39,7 +39,7 @@
 |---|---|
 | `README.md` | Hub 入口：定位、仓库边界、标准任务流程、状态模型、文件地图 |
 | `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
-| `PROJECT_CONTEXT.md` | 四仓库边界、项目状态判断语义、Control Tower 定位、Buddy 跨仓库工作约定 |
+| `PROJECT_CONTEXT.md` | 五仓库边界、项目状态判断语义、Control Tower 定位、Buddy 跨仓库工作约定 |
 | `MEMORY_ARCHITECTURE.md` | 本文件：四层模型、归属、证据语义、冲突处理、读写职责 |
 | `MEMORY_ROUTER.md` | 路由判定程序与路由测试记录 |
 | `MEMORY_PROTOCOL.md` | 记录语义、写入时机、P0 成功标准、设计参考 |
