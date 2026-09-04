@@ -76,3 +76,4 @@ evidence_note: >
 - **README「状态模型」**：`status:*` Label 仍是机器可查的 current status；`STATUS:` 评论降级为审计日志——Receipt 是审计日志的**结构化超集**。
 - **CI（memory-structure.yml）**：绿 run 本身就是 `ci-generated` Evidence；required check 化（M0）后即为机器级完成依据。
 - **演进**：本规范为 v1。字段变更走 ARCH-001 正常流程（Issue 提案 → Round 评审 → Human 决策），不得静默修改。
+

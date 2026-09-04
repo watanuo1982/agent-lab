@@ -178,3 +178,4 @@ buddy-local 侧分离（H1–H4）严格依赖 GitHub 仅有的网页操作入�
 
 PASS WITH CONDITIONS：L1–L5/L7 机器验证全绿（least privilege、范围收敛、零共享凭证、CI 面积最小、通道独立）；
 U2/U3 为 Human UI 动作，U1/U5 为已登记的 residual risk，无架构漂移、无新增基础设施、无业务逻辑改动。
+

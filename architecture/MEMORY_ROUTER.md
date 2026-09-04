@@ -101,3 +101,4 @@ Q5  无法判定 → 不写入事实层。标 `[Unknown]`，**必须登记 `UNKN
 
 - 路由测试目前只有 11 例，且全部来自 Hub 与 commercial-radar。**迁移 `-quantitative-trading` / `-ai-content` 时应各补 3–5 例**，尤其是「业务事实 vs 外部资料」的边界。
 - 若后续出现「本程序判定不出」的 recurring 类型，应在此文件补规则，而不是在个案里临时决定。
+

@@ -12,7 +12,7 @@ ChatGPT ↔ Work Buddy 的跨项目通知与协作总入口。
 - 跨项目状态指针
 - 通用协作协议
 - 跨项目记忆架构（见下节文件地图）
-- **Agent System 的全局运行时架构（见 `CLOUD_RUNTIME_ARCHITECTURE.md`）**
+- **Agent System 的全局运行时架构（见 `architecture/CLOUD_RUNTIME_ARCHITECTURE.md`）**
 
 ## Agent 统一入口（强制）
 
@@ -22,17 +22,17 @@ Human 不需要再提供启动清单。只要说：
 
 > **检查 Git 的记忆。**
 
-Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap；Human 后续指出具体项目后，Agent 自动执行 Project Bootstrap + Plan Continuity Check。
+Agent 就自动读取 `architecture/AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap；Human 后续指出具体项目后，Agent 自动执行 Project Bootstrap + Plan Continuity Check。
 
 **任何产生 durable change 的工作单元结束时，Agent 必须自动执行 Memory Sync Gate，并在需要时把记忆写回 Git。Human 不负责提醒“上传记忆”。**
 
-统一规则见 [`AGENT_GIT_MEMORY_CONTRACT.md`](AGENT_GIT_MEMORY_CONTRACT.md)。
+统一规则见 [`architecture/AGENT_GIT_MEMORY_CONTRACT.md`](architecture/AGENT_GIT_MEMORY_CONTRACT.md)。
 
 ## 文件地图
 
-记忆分为四层，完整定义见 `MEMORY_ARCHITECTURE.md`，路由规则见 `MEMORY_ROUTER.md`。
+记忆分为四层，完整定义见 `architecture/MEMORY_ARCHITECTURE.md`，路由规则见 `architecture/MEMORY_ROUTER.md`。
 
-每次进入 Git Memory Mode，先执行 `AGENT_GIT_MEMORY_CONTRACT.md`；Session 恢复细则见 `SESSION_BOOTSTRAP.md`。
+每次进入 Git Memory Mode，先执行 `architecture/AGENT_GIT_MEMORY_CONTRACT.md`；Session 恢复细则见 `architecture/SESSION_BOOTSTRAP.md`。
 
 | 层 | 位置 | 管什么 |
 |---|---|---|
@@ -45,25 +45,25 @@ Agent 就自动读取 `AGENT_GIT_MEMORY_CONTRACT.md` 并执行 Global Bootstrap�
 
 | 文件 | 职责 |
 |---|---|
-| `AGENT_GIT_MEMORY_CONTRACT.md` | **所有 Agent 的统一 Git Memory 入口、自动启动与自动写回合同** |
+| `architecture/AGENT_GIT_MEMORY_CONTRACT.md` | **所有 Agent 的统一 Git Memory 入口、自动启动与自动写回合同** |
 | `PROJECTS.md` | 项目注册表 + 新项目接入规范 |
 | `PROJECT_CONTEXT.md` | 四仓库边界、状态判断语义、Control Tower 定位、Buddy 跨仓库约定 |
 | `CURRENT_STATE.md` | Agent Hub 自身当前治理状态与恢复入口 |
 | `NEXT_WORK.md` | Agent Hub 自身下一步导航；正式任务仍以 Issue 为准 |
-| `MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
-| `MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
-| `MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
+| `architecture/MEMORY_ARCHITECTURE.md` | 四层模型、canonical 归属、证据语义、冲突处理、读写职责 |
+| `architecture/MEMORY_ROUTER.md` | 路由判定程序 + 路由测试记录 |
+| `architecture/MEMORY_PROTOCOL.md` | 什么值得记 / 记录字段 / 写入时机 / 设计参考 |
 | `UNKNOWN_REGISTRY.md` | Unknown 唯一登记、生命周期、复查与裁决状态 |
-| `SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
-| `EXECUTION_RECEIPT.md` | **Execution Receipt 规范（M2）：执行回执字段、`produced_by` 独立性分级（Evidence-first，Agent 自述不构成独立 Evidence）** |
-| `IDENTITY_TOKEN_POLICY.md` | **实例身份与凭证映射（M6）：实例 ID 登记、归属判定规则、目标凭证规格与风险登记（不含任何 token 值）** |
-| `ARCH-001_FINAL_ARCHITECTURE.md` | **ARCH-001 最终架构（已冻结，canonical baseline，Human 批准见 Issue #15 评论 5538205132）：五层职责、权威模型、Work Contract、Evidence-first、治理与 Phase A–E 实施计划** |
-| `CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
+| `architecture/SESSION_BOOTSTRAP.md` | Session 恢复与 Plan continuity 的详细检查协议 |
+| `architecture/EXECUTION_RECEIPT.md` | **Execution Receipt 规范（M2）：执行回执字段、`produced_by` 独立性分级（Evidence-first，Agent 自述不构成独立 Evidence）** |
+| `architecture/IDENTITY_TOKEN_POLICY.md` | **实例身份与凭证映射（M6）：实例 ID 登记、归属判定规则、目标凭证规格与风险登记（不含任何 token 值）** |
+| `architecture/ARCH-001_FINAL_ARCHITECTURE.md` | **ARCH-001 最终架构（已冻结，canonical baseline，Human 批准见 Issue #15 评论 5538205132）：五层职责、权威模型、Work Contract、Evidence-first、治理与 Phase A–E 实施计划** |
+| `architecture/CLOUD_RUNTIME_ARCHITECTURE.md` | **Cloudflare Agent Runtime 的全局架构、职责边界、权限、Memory、Free-first 与实施路线** |
 | `AGENTS.md` | GMR v0.2 运行时入口（intentionally tiny）：Git Memory Mode 触发与强制行为清单 |
-| `AI_OS_ARCHITECTURE.md` | 冻结前的 AI OS 系统架构描述（v1.0，2026-08-30 审计产物）；全局架构以 `ARCH-001_FINAL_ARCHITECTURE.md` 为 canonical，本文保留为系统描述与行业对齐参考 |
-| `PLAN_PROTOCOL.md` | 已确认 Plan 的 canonical governance：版本、生命周期、变更控制与冷启动连续性 |
+| `architecture/AI_OS_ARCHITECTURE.md` | 冻结前的 AI OS 系统架构描述（v1.0，2026-08-30 审计产物）；全局架构以 `architecture/ARCH-001_FINAL_ARCHITECTURE.md` 为 canonical，本文保留为系统描述与行业对齐参考 |
+| `architecture/PLAN_PROTOCOL.md` | 已确认 Plan 的 canonical governance：版本、生命周期、变更控制与冷启动连续性 |
 | `MEMORY_MANIFEST.yaml` | 机器可读的 Runtime manifest（v0.3）：Bootstrap / 路由 / 生命周期 / 写入策略 / Health 检查入口 |
-| `MEMORY_MODEL.md` | 记忆模型核心概念定义 |
+| `architecture/MEMORY_MODEL.md` | 记忆模型核心概念定义 |
 | `INBOX.md` | 跨项目任务指针（不复制任务正文） |
 | `external/` | External Memory（指针 + 判据） |
 | `archive/YYYY-MM.md` | 已完成跨项目任务归档 |
@@ -166,4 +166,5 @@ VERIFIED → Close
 
 除非出现明确收益，否则不增加 webhook、自动触发器或其他协作基础设施。
 
-**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果；`AGENT_GIT_MEMORY_CONTRACT.md` 管所有 Agent 的统一读写入口与记忆同步责任；`CLOUD_RUNTIME_ARCHITECTURE.md` 管 Cloudflare Agent Runtime 的全局架构。**
+**核心原则：Agent Hub 管跨项目通知；Project Repo 的 Issue 管具体任务；Project Repo 文件管项目知识与成果；`architecture/AGENT_GIT_MEMORY_CONTRACT.md` 管所有 Agent 的统一读写入口与记忆同步责任；`architecture/CLOUD_RUNTIME_ARCHITECTURE.md` 管 Cloudflare Agent Runtime 的全局架构。**
+
