@@ -2,15 +2,16 @@
 
 > 本文件由 `agent-lab` Issue #1 的 **CONTEXT CORRECTION** 指令建立（2026-08-29），作为 Buddy（Work Buddy）跨仓库工作的权威共同上下文。
 >
-> 它定义四个仓库的边界、项目状态如何判断、Issue 在其中扮演的角色，以及 Control Tower（GitHub Projects）的定位。**它不替代各业务仓库自己的 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md`，而是 Hub 级别的跨项目总览与约定。**
+> 它定义五个仓库的边界、项目状态如何判断、Issue 在其中扮演的角色，以及 Control Tower（GitHub Projects）的定位。**它不替代各业务仓库自己的 `PROJECT_CONTEXT.md` / `CURRENT_STATE.md`，而是 Hub 级别的跨项目总览与约定。**
 
-## 一、四仓库边界
+## 一、五仓库边界
 
 | Repository | 定位 | 项目状态如何判断 | Issue 的作用 |
 |---|---|---|---|
 | `-commercial-radar` | 商业机会发现 / Commercial Radar（ToC 选品） | 仓库研究成果（选品流水线、评分模型、实验记录）+ 当前 Issue + 最近 Commit/PR + `NEXT_WORK.md` 中的当前阶段 | 新任务 / 决策合同 |
 | `-quantitative-trading` | 量化研究与实盘策略 | 策略代码、回测与实盘结果、日报、`NEXT_WORK.md` 中的研究阶段 + 最近 Commit | 新任务 / 研究合同 |
 | `-ai-content` | AI 内容实验 | 内容/平台实验产出 + 当前 Issue + `NEXT_WORK.md` 中的内容阶段 + 最近 Commit | 新任务 / 实验合同 |
+| `-agent-runtime` | Cloud Runtime / Agent 执行基础设施（Cloudflare `core-agent`） | 仓库代码与部署配置 + 当前 Issue + `NEXT_WORK.md` 中的实现阶段 + 最近 Commit | 新任务 / 实现合同 |
 | `agent-lab` | 跨项目协作基础设施 / Agent Hub | Hub 文档（README/PROJECTS/INBOX/本文件）+ 跨项目 Issue + 最近 Commit | 协作机制、跨项目任务、Control Tower |
 
 ## 二、项目状态判断原则（关键，务必遵守）
@@ -49,7 +50,7 @@
 
 - `README.md`：Hub 定位、协作流程、状态模型、文件地图。
 - `architecture/AGENT_GIT_MEMORY_CONTRACT.md`：**所有 Agent 的统一 Git Memory 入口、自动启动、Plan continuity 与自动 Memory Sync 合同。**
-- `PROJECTS.md`：项目注册表（四仓库登记）+ 新项目接入规范 + Project Memory 采用状态。
+- `PROJECTS.md`：项目注册表（五仓库登记）+ 新项目接入规范 + Project Memory 采用状态。
 - `INBOX.md`：跨项目任务指针（不复制任务正文）。
 - `architecture/MEMORY_ARCHITECTURE.md`：**四层记忆模型（Global / Project / External / Session）的 canonical 定义** —— 归属、证据语义、冲突处理、读写职责、接入规范。
 - `architecture/MEMORY_ROUTER.md`：一条新信息该写到哪的判定程序 + 路由测试记录。
@@ -57,7 +58,7 @@
 - `architecture/SESSION_BOOTSTRAP.md`：ChatGPT Session 恢复与 Plan continuity 的专门协议。
 - `architecture/PLAN_PROTOCOL.md`：Plan 版本与变更控制。
 - `external/`：External Memory —— 外部知识的指针与判据，**不是事实源**。
-- **本文件**：四仓库边界 + 状态判断语义 + Control Tower 定位，作为跨项目共同上下文。
+- **本文件**：五仓库边界 + 状态判断语义 + Control Tower 定位，作为跨项目共同上下文。
 
 > 记忆架构的完整入口是 `architecture/MEMORY_ARCHITECTURE.md`；所有 Agent 的实际启动与同步入口是 `architecture/AGENT_GIT_MEMORY_CONTRACT.md`。
 
