@@ -1,15 +1,18 @@
 <!--
-CANONICAL FILE — ARCH-001 Final Architecture Candidate.
+CANONICAL FILE — ARCH-001 Final Architecture (FROZEN).
 Transcribed verbatim (no content changes) from watanuo1982/agent-lab#15, comment 5537869348,
-by buddy-local per the Buddy Review Task (comment 5537871089).
-Status: CANDIDATE — NOT FROZEN. Architecture freeze requires explicit Human approval in Issue #15.
-Any edit to this file must go through the normal PR path with required check `validate-memory`.
+by buddy-local per the Buddy Review Task (comment 5537871089); 5 required corrections applied
+per Freeze Prep (comment 5538032086, PR #22).
+Status: FROZEN — Human Final Approval recorded in Issue #15 comment 5538205132 (2026-09-04).
+This file is the canonical architecture baseline. Any edit must go through the normal PR path
+with required check `validate-memory` and requires a Human-approved architecture change.
 -->
 
-# ARCH-001 Round 5｜Final Architecture Candidate + Adjustment Plan
+# ARCH-001 Round 5｜Final Architecture + Adjustment Plan
 
-> Status: **CANDIDATE — pending Buddy review and Human final approval**
-> This comment is the canonical design input for the next implementation/review step. It does **not** itself freeze the architecture.
+> Status: **FROZEN — canonical architecture baseline**（Human Final Approval：Issue #15 评论 5538205132，2026-09-04）
+> 历史沿革：本文件由 Round 5 Candidate（评论 5537869348）逐字转录并应用 5 项 Freeze Prep 修正（PR #22）后，经 Human 批准冻结。
+> Open items（buddy-local fine-grained PAT 创建 / classic PAT 轮换）不因冻结自动完成，见 §14 与 `IDENTITY_TOKEN_POLICY.md`。
 
 ## 1. Core architecture
 
@@ -273,8 +276,8 @@ Open items registered at freeze (tracked, not claimed complete):
 - buddy-local fine-grained PAT creation — Human UI action, spec in `IDENTITY_TOKEN_POLICY.md` §3.2; verification protocol pending execution.
 - classic PAT rotation/deprecation after separation (see `IDENTITY_TOKEN_POLICY.md` R-M6-2).
 
-Remaining gate:
+Freeze record:
 
-**Buddy review completed — PASS WITH CONDITIONS (Issue #15 comment 5537995684); all 5 required corrections are applied in this Freeze Candidate. Remaining gate: Human Final Approval. Only after approval do we freeze and execute Phase A–E.**
+**Buddy review completed — PASS WITH CONDITIONS (Issue #15 comment 5537995684); all 5 required corrections applied via PR #22. Human Final Approval recorded (Issue #15 comment 5538205132, 2026-09-04): ARCH-001 is FROZEN and is the canonical architecture baseline. Implementation proceeds in phases (Phase A–E) via Issue-first task contracts.**
 
-Status: **READY FOR HUMAN FINAL APPROVAL** (not FROZEN).
+Status: **FROZEN — CANONICAL ARCHITECTURE BASELINE**.
