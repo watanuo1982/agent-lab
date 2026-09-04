@@ -29,14 +29,12 @@
 
 - **性质**：候选的跨项目态势汇总层，用于一屏纵览三业务仓库 + Hub 的 Issue；**不是任务入口，不替代 Issue**。
 - **形态**：用户级（user-level）Project，归属 `agent-lab`；仓库级 Project 无法跨多个仓库，故不可用。
-- **当前状态**：设计已确定，但当前尚未实际建立，因 Projects v2 权限/工具链限制而 BLOCKED——`AI Venture Control Tower`（用户级，私有），含 Portfolio / Attention 两视图与五字段（Project / Stage / Status / Priority / Next Decision），纳入 3 个 Issue。
-- **已知限制（维持认知，不因本次任务改变）**：
+- **当前状态（2026-09-04 更新，U-A 裁决收口）**：看板 `AI Venture Control Tower`（用户级，私有）**已建立**——`https://github.com/users/watanuo1982/projects/1`，含 Portfolio / Attention 两视图与五字段（Project / Stage / Status / Priority / Next Decision），纳入 3 个 Issue。但 2026-08-29 建立后未持续维护，当前为静态快照，未实际承担跨项目态势职能。
+- **已知限制（维持认知）**：
   - 视图的 group by / filter 无法经 API 设置，需在网页端补充；
   - 新 Issue 不会自动进入 Project，需手动纳项；
   - Project 字段值与 Issue 真实状态双向不同步，是快照而非活链接。
-- **本次任务不新建 / 不扩展 Project**，除非后续明确指令且权限/工具实际可用。
-- ⚠️ **记载冲突（`[Unknown]`，2026-08-30 记）**：本 Issue（#1）2026-08-29 08:05 UTC 的评论称 Control Tower **已建立**并给出 `https://github.com/users/watanuo1982/projects/1`（3 Issue / 2 视图 / 5 字段），与 08:36 UTC 的更正评论及本文件上面的「尚未实际建立」表述**互相矛盾**。
-  **在 Human / ChatGPT 裁决前不改任何一方的表述**，冲突登记在 `architecture/MEMORY_ARCHITECTURE.md` §10 **U-A**，路由测试 R-10。
+- **态势汇总现状**：跨项目一屏纵览现由**周度巡检报告**承担（2026-09-04 起，每周一 09:00 自动运行：五仓 status 矩阵 / 近 7 天动向 / done-but-open 积压 / 凭据与配置漂移）。看板保留作快照，是否恢复使用待后续明确指令，不自动扩展。
 
 ## 四、Buddy 跨仓库工作约定
 
