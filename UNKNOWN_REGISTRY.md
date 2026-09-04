@@ -64,3 +64,4 @@
 3. Buddy **不得**自行把 Unknown 改为 `RESOLVED`，也不得替 Human / ChatGPT 做最终事实裁决。
 4. 新增 Unknown 必须同时登记本文件；只写进其他 Markdown 表格而不登记，视为结构不完整。
 5. 任何与某条 Unknown 的 `复查触发条件` 相匹配的工作开始前，必须先处理该条 Unknown。
+| U-TEST | 故意违规探针行（字段数错误） | OPEN | 2026-09-04 | | | | PENDING | |
