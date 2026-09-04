@@ -1,88 +1,95 @@
-# ARCH-001 — Multi-Agent Operating Architecture v2 — Draft
+# ARCH-001 — 多 AI 协作操作架构 v2 — 初稿
 
-> Status: **Working Draft / not frozen**
-> Date: 2026-09-04
-> Canonical workspace: `agent-lab`
-> Related review Issue: #15
+> 状态：**工作初稿 / 未冻结**
+> 日期：2026-09-04
+> 规范工作区：`agent-lab`
+> 对应评审 Issue：#15
 
-## 1. Purpose
+## 1. 目的
 
-Define a general operating architecture for Human + multiple AI agents + GitHub + runtime environments.
+建立一套适用于 **Human + 多个 AI Agent + GitHub + Runtime** 的通用工作架构。
 
-The architecture must support the user's actual working pattern rather than forcing agents into legacy roles.
+目标不是再造一个复杂的 Agent 平台，而是把当前已经实际运行的工作方式抽象出来，并让 ChatGPT、Buddy、其他 AI、GitHub 和 Cloud Runtime 各自承担正确的职责。
 
-The central idea is:
+核心判断：
 
-> **Agents can be peers in conversation while remaining asymmetric in capability, permission and authority. GitHub is the durable shared state; runtimes are execution substrates; Human retains ultimate authority.**
+> **Agent 可以在对话层平等参与，但能力、权限和权威可以不同；GitHub 是持久化共享状态，Runtime 是执行基础设施，Human 保留最终权威。**
 
-This document is a draft for multi-AI review. It is not yet a final specification.
+本文件只是多 AI 共评审的初稿，尚未形成最终规范。
 
-## 2. System at a glance
+## 2. 总体框架
 
 ```text
-                              HUMAN
-                    Goal / Judgment / Approval
-                               |
-          +--------------------+--------------------+
-          |                    |                    |
-       ChatGPT              Buddy              Other AI
-     intelligence         full-end             specialized
-      + review            operation              capability
-          |                    |                    |
-          +--------------------+--------------------+
-                               |
-                     Agent Collaboration Layer
-                task / handoff / status / result / review
-                               |
-                               v
-                    +----------------------+
-                    |   GITHUB CONTROL /   |
-                    |   CANONICAL STATE    |
-                    +----------+-----------+
-                               |
-             +-----------------+------------------+
-             |                                    |
-             v                                    v
-       PROJECT REPOS                         RUNTIME LAYER
-  facts / artifacts / memory            Cloud / local / remote
-       / decisions                      execution / automation
-             |                                    |
-             +-----------------+------------------+
-                               v
-                         Evidence / Logs
-                               |
-                               v
-                    Verification / Review
-                               |
-                               v
-                     State + Memory Update
+                               HUMAN
+                       目标 / 判断 / 批准
+                                │
+            ┌───────────────────┼───────────────────┐
+            │                   │                   │
+         ChatGPT             Buddy              Other AI
+       研究 / 推理 /         全端执行 /          专业能力 /
+       架构 / 审核           环境运维             特定执行
+            │                   │                   │
+            └───────────────────┼───────────────────┘
+                                │
+                      Agent 协作 / 协议层
+             Task / Handoff / Status / Result / Review
+                                │
+                                ▼
+                 ┌─────────────────────────┐
+                 │       GITHUB            │
+                 │   共享控制面 / 权威状态  │
+                 └────────────┬────────────┘
+                              │
+                ┌─────────────┴─────────────┐
+                │                           │
+                ▼                           ▼
+          PROJECT REPOS                RUNTIME LAYER
+       项目事实 / 素材 / 记忆          Cloud / Local / Remote
+       决策 / 任务 / 产物              执行 / 自动化 / 服务
+                │                           │
+                └─────────────┬─────────────┘
+                              ▼
+                       Evidence / Logs
+                              │
+                              ▼
+                     Verification / Review
+                              │
+                              ▼
+                      State / Memory 更新
 ```
 
-## 3. Six layers
+## 3. 六层结构
 
-### L0 — Human layer
+### L0 — Human 层
 
-Human defines goals, priorities, strategic choices and final authority.
+负责：
+- 目标
+- 优先级
+- 战略判断
+- 最终决策
+- 高风险/不可逆操作批准
+- 架构最终批准
 
-Human approval is required where the action is irreversible, high-impact, platform-sensitive, or explicitly reserved.
+Human 不需要成为每一个执行动作的中间人。
 
-### L1 — Agent layer
+### L1 — Agent 层
 
-ChatGPT, Buddy and other AIs are first-class participants.
+ChatGPT、Buddy、其他 AI 都可以成为**一等参与者**。
 
-First-class means an agent can, subject to its actual capabilities and permissions:
-- receive work directly;
-- reason and propose;
-- communicate with Human and other agents through supported channels;
-- execute available actions;
-- produce evidence;
-- review or challenge another agent's result.
+“一等参与者”意味着，在自身能力和授权范围内，Agent 可以：
+- 直接接受 Human 工作；
+- 独立分析和提出方案；
+- 与 Human 对话；
+- 与其他 Agent 协作；
+- 执行工作；
+- 产生证据；
+- 审核或质疑其他 Agent 的结果。
 
-First-class does **not** mean equal capability or equal authority.
+但一等参与者不意味着能力相同，也不意味着权威相同。
 
-### L2 — Collaboration / Protocol layer
+### L2 — Agent 协作 / 协议层
 
-Defines how agents cooperate:
+定义 Agent 之间如何协作：
 - Task
 - Handoff
 - Status
@@ -93,119 +100,130 @@ Defines how agents cooperate:
 - Escalation
 - Approval
 
-GitHub Issues remain the default durable task contract; comments and commits provide execution/review evidence.
+GitHub Issue 继续作为默认的持久化任务契约；Issue Comment、Commit、Artifact 等承担过程和结果记录。
 
-### L3 — Canonical State layer
+### L3 — Canonical State 层
 
-GitHub is the durable shared state and control plane.
+GitHub 是整个系统的**持久化共享状态和控制面**。
 
-It contains, as appropriate:
-- project context and state;
-- tasks and acceptance criteria;
-- artifacts;
-- decisions;
-- durable memory;
-- provenance and evidence pointers;
-- audit history.
+这里保存：
+- 项目 Context / State
+- Task
+- Artifact
+- Decision
+- Durable Memory
+- Provenance
+- Evidence 指针
+- Audit History
 
-No agent's private context is canonical.
+任何 Agent 的私有上下文都不是 Canonical State。
 
-### L4 — Runtime / Execution layer
+### L4 — Runtime / Execution 层
 
-Local machines, remote machines, Cloudflare and other runtime environments execute work.
+包括：
+- Cloudflare
+- 本地计算机
+- 远程机器
+- 浏览器环境
+- API / MCP
+- 其他执行环境
 
-Runtime may be persistent, event-driven, scheduled or manually invoked.
+Runtime 负责“把事情做出来”，而不是决定“什么是真实状态”。
 
-Runtime is not the source of truth.
+### L5 — Evidence / Verification / Governance 层
 
-### L5 — Evidence / Verification layer
-
-Every material claim follows:
+核心链路：
 
 ```text
 Claim → Evidence → Verification → Canonical State
 ```
 
-Examples of evidence:
-- commit SHA;
-- test output;
-- deployment identifier;
-- runtime logs;
-- generated artifact;
-- reproducible execution result.
+例如：
+- Commit SHA
+- Test Result
+- Deployment ID
+- Runtime Log
+- Generated Artifact
+- 可复现的执行结果
 
-A report saying “done” is a claim, not evidence.
+“我做完了”只是 Claim，不是 Evidence。
 
-## 4. Core distinctions
+## 4. 四个必须分开的概念
 
 ### Capability ≠ Permission
 
-An agent may technically be able to perform an action without being authorized to perform it.
+Agent 有能力做某事，不代表它被允许做。
 
 ### Permission ≠ Authority
 
-Permission to modify a repository does not automatically grant authority to redefine project policy or architecture.
+Agent 有权限修改某个 Repo，不代表它拥有修改项目规则或架构的权威。
 
-### Authority ≠ Canonical ownership
+### Authority ≠ Canonical Ownership
 
-An agent may make a decision within its scope, while the durable canonical representation belongs in GitHub.
+Agent 可以在授权范围内作出判断，但最终的持久化事实仍应进入 Canonical State。
 
-### Conversational equality ≠ execution equality
+### 对话平等 ≠ 能力平等
 
-All participating AIs may talk directly with Human, while Buddy may have substantially broader local/cloud/browser/deployment execution capabilities than another AI.
+ChatGPT、Buddy、Other AI 都可以直接和 Human 对话，但 Buddy 可以拥有明显更强的本地电脑、浏览器、云环境、部署、文件和应用操作能力。
 
-## 5. Proposed agent model
+## 5. Agent 模型初稿
 
-| Participant | Primary strength | Not assumed to own |
+| 参与者 | 主要能力假设 | 不自动拥有 |
 |---|---|---|
-| Human | Goal, judgment, ultimate approval | — |
-| ChatGPT | Research, synthesis, architecture, planning, review, supported execution | Human authority |
-| Buddy | Full-end execution, environment operations, implementation, diagnosis, repair, direct conversation | Canonical truth / automatic architecture authority |
-| Other AI | Domain-specific reasoning or execution according to its actual capability statement | Other agents' private state |
+| Human | 目标、判断、最终批准 | — |
+| ChatGPT | 研究、推理、架构、规划、内容、审核、已有工具支持下的执行 | Human 最终权威 |
+| Buddy | 全端执行、环境操作、实现、诊断、修复、部署、直接对话 | Canonical Truth / 自动架构权威 |
+| Other AI | 根据自身能力提供专业推理或执行 | 其他 Agent 的私有上下文 |
 
-These are starting hypotheses only. Final roles must be derived from Round 1 capability statements.
+注意：以上只是初始假设，最终角色必须以 Round 1 的实际 Capability Statement 为依据。
 
-## 6. Canonical state model
-
-The system should have one durable state model rather than separate agent memories.
+## 6. 整体工作链路
 
 ```text
-Human intent
-    ↓
+Human Intent
+      ↓
 Task / Decision
-    ↓
-Execution
-    ↓
+      ↓
+Agent 接手
+      ↓
+Plan / Reason
+      ↓
+Execute
+      ↓
 Artifact + Evidence
-    ↓
-Review
-    ↓
+      ↓
+Verify
+      ↓
+Review / Challenge
+      ↓
 Canonical State
-    ↓
+      ↓
 Memory / Next Work
 ```
 
-Agents may keep temporary session/runtime state, but durable state must be promoted explicitly.
+核心不是“谁来执行”，而是：
 
-## 7. Task and handoff model
+> **任何 Agent 都可以成为工作入口或执行者，但结果必须最终回到共享的 Canonical State。**
 
-A durable task should minimally contain:
+## 7. Task / Handoff 初稿
+
+一个可以跨 Agent 传递的 Task 至少包含：
 
 1. Objective
-2. Scope / non-scope
-3. Context pointers
-4. Acceptance criteria
-5. Expected artifact
-6. Authority / permission constraints
-7. Verification requirements
-8. Reporting format
-9. Current status
+2. Scope / Non-scope
+3. Context 指针
+4. Acceptance Criteria
+5. Expected Artifact
+6. Permission / Authority Constraints
+7. Verification Requirements
+8. Reporting Format
+9. Status
 
-A handoff should point to the task and canonical state, not depend on hidden conversation history.
+Handoff 不应该依赖隐藏的聊天上下文，而应该指向 GitHub 中的 Canonical State。
 
-An agent may hand work directly to another agent if the task contract and permissions permit it.
+允许 Agent → Agent 直接交接，但必须遵守 Task Contract 和权限边界。
 
-## 8. Agent lifecycle
+## 8. Agent 生命周期
 
 ```text
 Receive
@@ -214,7 +232,7 @@ Understand
   ↓
 Plan / Propose
   ↓
-Execute (if authorized)
+Execute（如果获得授权）
   ↓
 Verify
   ↓
@@ -225,15 +243,13 @@ Review / Challenge
 Promote Canonical State
 ```
 
-For known deterministic sequences, use workflows instead of unnecessary agent autonomy.
+对于确定性很强的工作，优先使用 Workflow，而不是为了“AI 化”而增加 Agent 自主性。
 
-## 9. Disagreement model
+## 9. Agent 之间允许不同意见
 
-Agents are allowed to disagree.
+多 Agent 架构不能假设所有 Agent 都会得出相同结论。
 
-Disagreement must be represented explicitly rather than silently selecting one answer.
-
-Minimum structure:
+出现冲突时，应明确记录：
 
 ```text
 Claim A
@@ -244,18 +260,20 @@ Evidence B
 
 Conflict / Unknown
 
-Resolution owner
-Resolution evidence
-Final decision
+Resolution Owner
+Resolution Evidence
+Final Decision
 ```
 
-Architecture conflicts ultimately escalate to Human unless authority has been explicitly delegated.
+不能因为一个 Agent 声音更大就自动成为真相来源。
 
-## 10. Failure and repair model
+涉及架构、重大权限或不可逆行为的冲突，最终升级给 Human，除非此前已经明确授权给某个 Agent。
 
-A capable agent may diagnose and repair failures **inside its already-authorized scope**.
+## 10. Failure / Repair 模型
 
-It may not silently expand scope to fix a problem.
+如果 Agent 具备足够执行能力，可以在**原有授权范围内**自行诊断和修复。
+
+不能因为发现问题就自动扩大自己的权限。
 
 ```text
 Failure
@@ -263,162 +281,212 @@ Failure
 Diagnose
   ↓
 Classify
-  ├─ transient → retry within policy
-  ├─ known repair → repair within scope
-  ├─ evidence insufficient → investigate
-  └─ authority/scope conflict → escalate
+  ├─ transient → 按策略 Retry
+  ├─ known repair → 授权范围内 Repair
+  ├─ insufficient evidence → Investigate
+  └─ authority conflict → Escalate
   ↓
 Verify
   ↓
-Report evidence
+Report Evidence
 ```
 
-## 11. Memory integration
+这点对 Buddy 特别重要：
 
-The existing GMR v0.2 model remains the baseline unless ARCH-001 explicitly supersedes a rule.
+> Buddy 的价值不仅是“执行任务”，还包括在授权范围内完成执行、验证、诊断、修复和环境管理的完整闭环。
 
-New multi-agent events should enter Memory only when they have durable future value and satisfy the existing promotion policy.
+## 11. Memory 与现有 GMR 的关系
 
-Examples:
-- stable architecture decision → Decision / Global
-- project execution result → Project State / Knowledge
-- temporary agent conversation → Session only
-- unresolved architectural conflict → Unknown
+现有 GMR v0.2 继续作为 Memory 基线。
 
-No agent automatically becomes the owner of Global Memory merely because it discovered or proposed something.
+ARCH-001 不自动推翻 GMR；只有明确发生冲突的条款才进入后续 Supersession / Revision。
 
-## 12. Git / Runtime boundary
+基本原则继续保持：
 
-GitHub owns durable truth.
+- Session 不等于 Durable Memory
+- Project Memory 与 Global Memory 隔离
+- Memory 必须有 Provenance
+- 有效的长期信息才进入 Durable Memory
+- 冲突不能静默覆盖
+- 不确定状态进入 Unknown
+- Agent 不因为“发现信息”就自动拥有 Global Memory
 
-Runtime owns execution state that is inherently operational and temporary, such as:
-- process state;
-- transient queues;
-- logs before promotion;
-- ephemeral files;
-- runtime credentials and secrets.
+多 Agent 架构增加的是：
 
-When runtime work changes durable project state, it must produce evidence and promote the result back to Git.
+> **多个 Agent 可以共同产生 Memory Candidate，但 Canonical Memory 仍必须按照统一规则进入 Git。**
 
-If runtime disappears, the project should remain recoverable from Git to the maximum practical extent.
+## 12. Git / Runtime 边界
 
-## 13. Invocation model
+### GitHub 负责
 
-Invocation is a mechanism, not an architectural role.
+- Durable State
+- Task
+- Project Memory
+- Decision
+- Artifact
+- Provenance
+- Audit
 
-Supported invocation sources may include:
-- Human request;
-- GitHub event/webhook;
-- schedule;
-- API;
-- runtime event;
-- direct agent action.
+### Runtime 负责
 
-The architecture should not depend on one specific trigger mechanism.
+- Process State
+- Queue
+- 临时文件
+- Runtime Logs
+- 执行环境
+- Secrets
+- Deployment
 
-## 14. Security and authority
+Runtime 的结果如果具有长期价值，必须通过 Evidence 回写 Git。
 
-Default rules:
+因此：
 
-1. No autonomous scope expansion.
-2. Least authority, not least capability.
-3. Read/write permissions are explicit where practical.
-4. Cross-project writes require cross-project authority.
-5. High-impact and irreversible actions require Human approval unless explicitly delegated.
-6. Secrets remain in appropriate secret-management/runtime boundaries and are not copied into Git memory.
-7. Agents must surface uncertainty and conflicts.
+> **Runtime 可以消失，项目仍然应该尽可能从 Git 恢复。**
 
-## 15. Replaceability tests
+## 13. Invocation 模型
 
-A healthy architecture should pass:
+Invocation 是机制，不是架构角色。
 
-### Agent replacement
-If ChatGPT is unavailable, another agent can recover from Git and continue.
+可以来自：
+- Human
+- GitHub Event / Webhook
+- Schedule
+- API
+- Runtime Event
+- Agent Direct Action
 
-If Buddy is unavailable, another execution-capable agent can continue from Git where tooling permits.
+因此系统不应该绑定某一种触发方式。
 
-### Runtime replacement
-If Cloudflare is unavailable, durable project state remains in Git and another runtime can be substituted where practical.
+## 14. 权限与安全
 
-### Conversation replacement
-A new session should recover the necessary state from canonical project/global memory without reconstructing hidden chat history.
+默认原则：
 
-## 16. Review and governance cycle
+1. Agent 不得自动扩大权限。
+2. 遵循 **Least Authority**，而不是简单追求 Least Capability。
+3. Read / Write 权限尽量明确。
+4. 跨项目修改必须拥有明确的跨项目授权。
+5. 高风险、不可逆、平台敏感操作原则上需要 Human Approval，除非明确授权。
+6. Secrets 不进入 Git Memory。
+7. 不确定和冲突必须显式暴露。
+
+## 15. 可替换性
+
+系统不应该依赖某一个 Agent 才能运行。
+
+### ChatGPT 被替换
+
+新的 Agent 读取 Git Canonical State 后应该可以继续工作。
+
+### Buddy 被替换
+
+只要新的 Agent 具备所需执行能力，也应该可以从 Git 接续任务。
+
+### Runtime 被替换
+
+Cloudflare 不可用时，项目 Durable State 不应该因此丢失，并应尽可能切换其他 Runtime。
+
+### Session 被替换
+
+新会话不应该依赖旧聊天记录才能恢复项目。
+
+## 16. 整体治理流程
 
 ```text
+Round 1
 Capability Statements
         ↓
-Independent Architecture Proposals
+Round 2
+各 Agent 独立提出架构方案
         ↓
+Round 3
 Cross-Agent Conflict Review
         ↓
-Consolidated Draft
+Round 4
+ChatGPT 综合形成 Consolidated Draft
         ↓
-Implementation Feasibility Review
+Round 5
+Buddy 做 Implementation Feasibility Review
         ↓
-Human Approval
+Round 6
+Human Final Decision
         ↓
 Architecture Freeze
         ↓
-Bounded Implementation Issues
+Round 7
+拆解为具体 Implementation Issues
         ↓
-Pressure Tests
+Pressure Test
         ↓
-Architecture Revision only when evidence requires it
+只有在真实失败证据出现时修改架构
 ```
 
-## 17. Proposed repository organization
+## 17. 对现有三个项目进行压力测试
 
-Keep the existing `agent-lab` structure minimal.
+### AI Content
 
-Potential architecture documents:
+重点验证：
+- Git → Cloud Runtime
+- AI 执行
+- Runtime 持久化
+- Git Writeback
+- Review
+- Retry / Failure
+- Evidence
 
-- `AI_OS_ARCHITECTURE.md` — current/frozen operating architecture
-- `architecture/ARCH-001_DRAFT.md` — this review draft
-- `AGENT_PROTOCOL.md` — finalized cross-agent interaction contract
-- `CANONICAL_STATE_MODEL.md` — finalized state ownership model
-- `EXECUTION_AUTHORITY.md` — capability / permission / authority rules
-- `CLOUD_RUNTIME_ARCHITECTURE.md` — runtime boundary
-- existing Memory documents — GMR and memory rules
+P04 已经是目前最重要的真实验证案例。
 
-Do not create these as final documents until review establishes that each is necessary.
+### Quantitative Trading
 
-## 18. Pressure-test projects
+重点验证：
+- Research State
+- Data State
+- Strategy Decision
+- Agent Handoff
+- Execution Boundary
+- Memory Isolation
 
-The architecture should be validated against at least:
+### Commercial Radar
 
-- `-ai-content`: real Cloudflare + Git + AI workflow, including P04 end-to-end execution and review.
-- `-quantitative-trading`: research workflow, data state, strategy decisions and execution boundaries.
-- `-commercial-radar`: research/evidence workflow and cross-agent handoffs.
+重点验证：
+- Research
+- Evidence
+- 多 Agent 协作
+- Opportunity State
+- Validation
 
-Tests should focus on actual failure modes rather than architectural completeness.
+## 18. 当前不做什么
 
-## 19. Current non-goals
+暂不因为“架构看起来更完整”而增加：
 
-Do not add:
-- a new AI OS repository;
-- a second task tracker;
-- a vector/graph database merely for completeness;
-- a mandatory orchestrator;
-- automatic cross-project memory promotion;
-- always-on agents without a demonstrated need;
-- hidden agent-to-agent state outside canonical artifacts.
+- 新 AI OS Repo
+- 第二套 Task Tracker
+- Vector DB / Graph DB
+- 强制 Orchestrator
+- 自动跨项目 Memory Promotion
+- 没有实际需求的 Always-on Agent
+- 隐藏在 Agent 私有上下文中的关键共享状态
 
-## 20. Open questions for Round 2
+原则：
 
-1. What exactly qualifies an agent as first-class?
-2. Which agent actions may occur without Human confirmation?
-3. Can agents delegate authority, or only work?
-4. What minimum protocol is needed for direct agent-to-agent handoff?
-5. Which runtime states must be persisted?
-6. What evidence is sufficient for each class of claim?
-7. When should disagreement block execution versus merely create an Unknown?
-8. How should concurrent Git writes be coordinated?
-9. Which existing GMR v0.2 rules need extension for multi-agent operation?
-10. Which current project workflows should be used as acceptance tests?
+> **先证明现有架构失败，再增加新的基础设施。**
 
-## 21. Status
+## 19. Round 2 待解决问题
 
-**Draft only.**
+1. 什么标准才算“一等 Agent”？
+2. 哪些 Agent 行为可以无需 Human Approval？
+3. Agent 能否授权另一个 Agent？如果能，授权边界是什么？
+4. Agent-to-Agent Handoff 最小协议是什么？
+5. 哪些 Runtime State 必须持久化？
+6. 什么级别的 Evidence 才足以推动 State Promotion？
+7. 什么情况下 Disagreement 必须阻塞执行？
+8. 多 Agent 并发修改 Git 时如何处理？
+9. GMR v0.2 哪些规则需要针对多 Agent 扩展？
+10. P04 / Quant / Commercial Radar 分别应该承担哪些 Acceptance Tests？
 
-This document intentionally does not freeze the architecture. Round 1 capability statements and subsequent multi-AI review may change any section.
+## 20. 当前状态
+
+**WORKING DRAFT — 未冻结。**
+
+这份文档现在的作用是给所有参与的 AI 一个共同讨论底稿，而不是直接成为最终架构规范。
+
+在 Round 1 Capability Statements 收齐、Round 2 各 Agent 独立提出方案之前，不进行最终架构冻结，也不批量拆 Implementation Issues。
