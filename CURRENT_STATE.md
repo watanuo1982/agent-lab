@@ -24,16 +24,19 @@
 
 ## 治理状态
 - **M5 Cross-Runtime Handoff**：2026-09-04 完成 buddy-local → core-agent 最小接力实验（-ai-content `005_m5_handoff/`，B 以 `ai-content-cloud-runtime[bot]` 身份仅凭 GitHub 冷启动接手并落笔）；机制链路 PASS，content_revise 下游 4xx 与产出质量偏差已登记（见 Issue #15 M5 回报）。
-- **M6 Identity / Token Separation**：2026-09-04 审计完成——buddy-cloud 已用 GitHub App `ai-content-cloud-runtime`（contents:write + metadata:read，平台签名可辨）实现平台级分离；buddy-local 仍与 Human 共享全权限 classic PAT，fine-grained PAT 创建无 API（实测 404），标记 [Blocked] 待 Human 网页创建（规格与验证协议见 `architecture/IDENTITY_TOKEN_POLICY.md` §3.2）；归属判定规则与风险登记同文件。
+- **M6 Identity / Token Separation（D-2 收口，Issue #29，VERIFIED）**：三执行体身份完全分离——buddy-cloud = GitHub App `ai-content-cloud-runtime`（bot actor + 平台代签名）；buddy-local = fine-grained PAT（四步验证全过：无 scope 头 / 范围内真实 PR / 范围外 404 / workflows 403），classic PAT 已撤销（401 实测）、钥匙串死条目清除，token 覆盖五注册仓库；R-M6-1 / R-M6-2 关闭。规格、验证协议与风险登记见 `architecture/IDENTITY_TOKEN_POLICY.md`。
 - **ARCH-001 Round 5 候选落盘**：2026-09-04 将 Final Architecture Candidate（评论 5537869348）忠实转录为 `architecture/ARCH-001_FINAL_ARCHITECTURE.md`（CANDIDATE 未冻结，冻结待 Human 批准）；buddy-local 独立审查结论见 Issue #15。
 - **ARCH-001 Freeze Prep**：2026-09-04 按 buddy-local 最终审查（评论 5537995684）的 5 项 Required Changes 完成 Freeze Candidate 修正：M6 表述如实改为 PARTIAL 并登记 open items（buddy-local fine-grained PAT 创建 / classic PAT 轮换）、Phase A 撤销 -agent-runtime 未注册误判（commit 28a181f8 已注册）、Phase B 清单补全三个新 canonical 文件并加入 README 文件地图规则、Phase C 增加 quantitative-trading 只读先行与 commercial-radar [Unknown] 先盘点护栏；文件状态 `READY FOR HUMAN FINAL APPROVAL`，未冻结。
 - **ARCH-001 已冻结**：2026-09-04 Human Final Approval（Issue #15 评论 5538205132）——`architecture/ARCH-001_FINAL_ARCHITECTURE.md` 为 canonical architecture baseline（FROZEN）；GMR v0.2 不变，仍为 memory baseline；open items（buddy-local fine-grained PAT 创建 / classic PAT 轮换）继续按 `architecture/IDENTITY_TOKEN_POLICY.md` 跟踪，不因冻结自动完成。
-- **ARCH-001-IMPL-01（Phase A + Phase B，进行中）**：Issue #23——Hub 自身 canonical 收敛与协议对齐（ARCH 状态改写、README 文件地图收敛、CURRENT_STATE/NEXT_WORK 登记、各协议文件与冻结架构一致性修正）；Phase C 逐项目审计未开始。
+- **ARCH-001-IMPL-01（Phase A + Phase B）**：Issue #23 完成并 VERIFIED——Hub 自身 canonical 收敛与协议对齐（ARCH 状态改写、README 文件地图收敛、CURRENT_STATE/NEXT_WORK 登记、协议文件一致性修正）。
+- **Phase C 核心目标（状态元数据对齐）**：由 D-3 覆盖（Issue #35，VERIFIED）——三业务仓 open issues 全部对齐 canonical `status:*` Label、label 定义补齐、`GITHUB_WORKFLOW.md` 状态元数据章节、validator 跨仓库检查；agent-runtime 定位审计由 D-5（Issue #39）覆盖。逐项目深度审计不再单独立项。
+- **Phase D Governance Hardening（D-2 ~ D-6，2026-09-04 全部收口）**：D-2 身份/凭证分离（#29）、D-3 状态元数据统一（#35）、D-4 权限治理（#37，五执行体 permission matrix + least-privilege 实测）、D-5 runtime 仓库定位审计（#39）、D-6 收口审计（#40，判定 PASS——Phase D 正式结束，停止架构治理转回业务执行）。全部 ChatGPT VERIFIED。
+- **其他（2026-09-04）**：agent-lab 由 public 转为 private（D-4 U2 解决）；五仓关键文档中文化、12 个架构/协议文档归位 `architecture/`；fine-grained PAT 约 2026-12-03 到期需轮换（届时更新 `architecture/IDENTITY_TOKEN_POLICY.md`）。
 - **M0 Governance Enforcement**：2026-09-04 起 main 分支保护已启用（PR-only + required check `validate-memory` + enforce_admins + 禁 force push/删除）；CODEOWNERS 已声明 canonical 文件 owner = Human；验收实验（直推 main 被 GH006 拒绝 / 违规 PR merge 被 405 拒绝）见 Issue #15 M0 回报。
 
 - Issue #4：已完成并关闭；`status:verified`。
 - GMR v0.2 implementation issue：Issue #14，规格已执行；实现变更已直接由 ChatGPT 写入 `agent-lab`，Buddy 未承担 Memory Owner 角色。
-- Current governance priority：以真实新 Session cold-start 验收 GMR v0.2，并逐步把 canonical/reference drift 检查工程化。
+- Current governance priority：以真实新 Session cold-start 验收 GMR v0.2（Issue #14，IMPLEMENTED / PENDING COLD-START ACCEPTANCE）；架构治理已随 Phase D 收口进入稳态维护，仅在新执行实例 / 新仓库 / token 轮换 / 漂移迹象时重启。
 
 ## 已知开放风险
 
