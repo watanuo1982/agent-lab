@@ -4,19 +4,19 @@ canonical_repo: watanuo1982/agent-lab
 scope: global
 bootstrap:
   mode: mandatory_every_new_session
-  entry: AGENT_GIT_MEMORY_CONTRACT.md
-  contract: AGENT_GIT_MEMORY_CONTRACT.md
+  entry: architecture/AGENT_GIT_MEMORY_CONTRACT.md
+  contract: architecture/AGENT_GIT_MEMORY_CONTRACT.md
   global:
     - README.md
     - PROJECTS.md
     - CURRENT_STATE.md
     - NEXT_WORK.md
-    - MEMORY_ARCHITECTURE.md
-    - MEMORY_ROUTER.md
-    - MEMORY_PROTOCOL.md
+    - architecture/MEMORY_ARCHITECTURE.md
+    - architecture/MEMORY_ROUTER.md
+    - architecture/MEMORY_PROTOCOL.md
     - UNKNOWN_REGISTRY.md
-    - SESSION_BOOTSTRAP.md
-    - PLAN_PROTOCOL.md
+    - architecture/SESSION_BOOTSTRAP.md
+    - architecture/PLAN_PROTOCOL.md
   project_after_identification:
     - README.md
     - PROJECT_CONTEXT.md
@@ -26,7 +26,7 @@ bootstrap:
     - DECISIONS.md
     - GITHUB_WORKFLOW.md
 routing:
-  canonical_rule: MEMORY_ROUTER.md
+  canonical_rule: architecture/MEMORY_ROUTER.md
 durable_test: "future wrong judgment OR repeated work OR violated direction"
 scopes:
   - task
